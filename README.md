@@ -32,4 +32,4 @@ const clicks = new Stream(stream => {
 })
 ```
 
-### The Stream Signaler
+#### The Stream Signaler
