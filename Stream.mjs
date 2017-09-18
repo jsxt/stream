@@ -45,13 +45,17 @@ export default class Stream {
                     value,
                 })
             } else if (this._state === 'empty' || this._state === 'queued') {
-                this._state = 'queued'
                 // If we're currently empty or queueing then we'll just append
                 // to our queue
                 this._queue.push(value)
                 // And pop off any excess elements in the queue
                 if (this._queue.length > maxSize) {
                     this._queue.shift()
+                }
+                // Only if any items are actually in the queue should
+                // we change to the queued state
+                if (this._queue.length > 0) {
+                    this._state = 'queued'
                 }
             } else if (this._state === 'endWaiting') {
                 const consumer = this._waiting.shift()
