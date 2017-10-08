@@ -7,6 +7,7 @@ Soon JavaScript will be getting [asynchronous iterators and asychronous generato
 
 This library intends to fill that void by providing a single concrete type which has large similarties to the Promise type, it also borrows ideas from the [obervable proposal](https://github.com/tc39/proposal-observable) in its minimal API design and use of an observer object.
 
+*NOTE: Like the Observable proposal the goal of Stream is to have minimal API surface which is why Stream does't include any operators such as `.map`/`.filter`/etc, those should provided by some other library*
 
 ### API
 
