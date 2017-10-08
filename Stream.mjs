@@ -233,6 +233,7 @@ export default class Stream {
         }
 
         const cleanup = initializer({
+            [Symbol.toStringTag]: 'StreamController',
             yield: _yield,
             next: _yield,
             throw: _throw,
