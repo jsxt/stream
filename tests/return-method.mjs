@@ -30,12 +30,13 @@ test("return throws if any exceptions were enqueued but not used", async t => {
     const s = new Stream(stream => {
         stream.yield(10)
         stream.yield(20)
-        stream.throw('Oh dear')
+        stream.throw(new Error('Oh dear'))
         stream.yield(30)
     })
 
     t.deepEqual({ done: false, value: 10 }, await s.next())
-    t.is('Oh dear', await t.throws(s.return()))
+    const error = await t.throwsAsync(_ => s.return())
+    t.is('Oh dear', error.message)
     t.deepEqual({ done: true, value: undefined }, await s.next())
 })
 
@@ -72,9 +73,9 @@ test("return follows the return value if there's one in the queue", async t => {
 test("return follows the error if there's one in the queue", async t => {
     const s = new Stream(stream => {
         stream.yield(10)
-        stream.throw(11)
+        stream.throw(new Error('oops'))
     })
 
-    const error = await t.throws(s.return())
-    t.is(11, error)
+    const error = await t.throwsAsync(_ => s.return())
+    t.is('oops', error.message)
 })

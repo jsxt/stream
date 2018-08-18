@@ -66,15 +66,15 @@ test("next method receives done values that haven't been received yet", async t 
 test("next method receives exceptions as rejections", async t => {
     const s = new Stream(stream => {
         stream.yield(11)
-        stream.throw('Whoopsies')
+        stream.throw(new Error('Whoopsies'))
         stream.yield(23)
         stream.throw('Oopsies again')
         stream.return("This shouldn't be observed")
     })
 
     t.deepEqual({ done: false, value: 11 }, await s.next())
-    const error = await t.throws(s.next())
-    t.is(error, 'Whoopsies')
+    const error = await t.throwsAsync(_ => s.next())
+    t.is(error.message, 'Whoopsies')
     t.deepEqual({ done: true, value: undefined }, await s.next())
     t.deepEqual({ done: true, value: undefined }, await s.next())
 })
@@ -91,14 +91,14 @@ test("next method receives exceptions as rejections that haven't been received y
     const four = s.next()
 
     streamController.yield(11)
-    streamController.throw('Whoopsies')
+    streamController.throw(new Error('Whoopsies'))
     streamController.yield(23)
-    streamController.throw('Oopsies again')
-    streamController.return("This shouldn't be observed")
+    streamController.throw(new Error('Oopsies again'))
+    streamController.return(new Error("This shouldn't be observed"))
 
     t.deepEqual({ done: false, value: 11 }, await one)
-    const error = await t.throws(two)
-    t.is(error, 'Whoopsies')
+    const error = await t.throwsAsync(_ => two)
+    t.is(error.message, 'Whoopsies')
     t.deepEqual({ done: true, value: undefined }, await three)
     t.deepEqual({ done: true, value: undefined }, await four)
 })
