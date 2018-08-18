@@ -9,12 +9,15 @@
     "author": "James \"The Jamesernator\" Browning",
     "license": "MIT",
     "dependencies": {
-        "@std/esm": "^0.9.2"
+        "@std/esm": "^0.9.2",
+        "esm": "^3.0.77"
     },
     "devDependencies": {
         "ava": "^0.22.0"
     },
     "ava": {
-        "files": ["tests/*.js"]
+        "files": [
+            "tests/*.mjs"
+        ]
     }
 }

@@ -12,6 +12,14 @@ const doNothing = _ => {
     /* Nothing to do in doNothing */
 }
 
+/**
+ * All states:
+ *
+ *  'empty'
+ *  'waiting'
+ *
+ */
+
 export default class Stream {
     constructor(initializer, { queue=Infinity }={}) {
         const maxSize = queue

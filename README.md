@@ -16,12 +16,15 @@ This library intends to fill that void by providing a single concrete type which
 Objects referred to here as "streams" are those objects returned by the `Stream` constructor, the purpose of a Stream object is to behave as an async iterable for some asynchronous collection (e.g. clicks on an element, ticks on a clock, etc).
 
 
-#### `new Stream(initializer: function, { queue: number=Infinity }={})`
+#### `new Stream(initializer: function, { queue: number=Infinity, cancelSignal: CancelSignal=CancelSignal.never }={})`
 
 The `Stream` constructor requires a single parameter as it's first argument, the initializer will be called immediately with a `StreamController` object (see later), it may optionally return a single function that will be called to cleanup any resources the stream may hold (guaranteed to be called only once).
 
-The second argument is an options object which currently only accepts a single property `queue` which is simply a non-negative integer that indicates how many items will be kept in the queue that haven't yet been consumed before the queue starts dropping the oldest items in the queue (e.g. if the queue length is 1 then if 10 items are emitted before any are consumed then only the last can be observed).
+The second argument is an options object that can accept the following properties:
 
+- `queue`: This is a non-negative integer (zero is OK) which indicates how many items will be kept in the queue that haven't yet been consumed.
+- `cancelSignal`: This is an object conforming to the CancelSignal interface the the [cancellation proposal](https://github.com/tc39/proposal-cancellation), if the source is cancelled
+    then the stream will be immediately cleaned up and will reject any outstanding `.next` and `.return` with a cancel error.
 
 #### `Stream.prototype.next(): Promise<{ done: boolean, value: any }, any>`
 
@@ -73,7 +76,7 @@ The `.throw` function on the stream controller will cause the oldest unfulfilled
 *NOTE: `.error` is simply an Observable compatible alias for `.throw`*
 
 
-#### `StreamController.return(value: any)/`StreamConroller.complete(value: any)`
+#### `StreamController.return(value: any)`/`StreamConroller.complete(value: any)`
 
 The `.return` function on the stream controller will cause the oldest unfufilled Promise requested by `.next` to return with the `value` field set to the passed value however unlike `.yield` it will also cause the `done` value to be set to `false` and cause the stream to complete. If the `.next` hasn't been requested yet then the return value will be queued until the queue is empty and `.next` is called again.
 
@@ -84,4 +87,49 @@ The `.return` function on the stream controller will cause the oldest unfufilled
 
 ### Examples
 
-Coming soon! Plus a blog post!
+Creating a stream of DOM events from an event listener:
+
+```js
+import Stream from '@jx/stream'
+
+function clicks(element) {
+    return new Stream(stream => {
+        element.addEventListener('clicks', stream.next)
+        return _ => {
+            element.removeEventListener('clicks', stream.next)
+        }
+    })
+}
+
+async function main() {
+    for await (const click of clicks(someElement)) {
+        console.log('Clicked!')
+    }
+}
+
+main()
+```
+
+Creating a lossy event stream that only emits the most recent location the mouse
+has been for cases where the loop body is too slow to keep up.
+
+```js
+import Stream from '@jx/stream'
+
+function mouseMoves(element) {
+    return new Stream(stream => {
+        element.addEventListener('mousemove', stream.next)
+        return _ => {
+            element.removeEventListener('mousemove', stream.next)
+        }
+    })
+}
+
+async function main() {
+    for await (const move of mouseMoves(someElement)) {
+
+    }
+}
+
+main()
+```
