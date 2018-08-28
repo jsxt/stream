@@ -1,6 +1,6 @@
 {
     "name": "@jx/stream",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "Stream is a single type like Promise representing a sequence of values instead of just one",
     "main": "Stream.js",
     "scripts": {
