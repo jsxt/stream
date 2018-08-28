@@ -1,27 +1,47 @@
-// Deferred creates a Promise and stores the resolve/reject on the same object
-function deferred() {
-    const def = {}
-    def.promise = new Promise((resolve, reject) => {
-        def.resolve = resolve
-        def.reject = reject
-    })
-    return def
+
+export class CancelError extends Error {}
+
+Symbol.cancelSignal = Symbol.cancelSignal || Symbol.for('https://github.com/tc39/proposal-cancellation/issues/22')
+
+const cancelSignalNever = {
+    [Symbol.cancelSignal]() {
+        return {
+            signaled: false,
+
+            subscribe() {
+                return {
+                    unsubscribe() {
+                        /* this signal can never be cancelled so nothing to do */
+                    },
+                }
+            },
+        }
+    },
 }
 
-const doNothing = _ => {
+// Deferred creates a Promise and stores the resolve/reject on the same object
+function deferred() {
+    let resolve
+    let reject
+    const promise = new Promise((_resolve, _reject) => {
+        resolve = _resolve
+        reject = _reject
+    })
+    return Object.freeze({
+        resolve,
+        reject,
+        promise,
+    })
+}
+
+const doNothing = () => {
     /* Nothing to do in doNothing */
 }
 
-/**
- * All states:
- *
- *  'empty'
- *  'waiting'
- *
- */
-
 export default class Stream {
-    constructor(initializer, { queue=Infinity }={}) {
+    constructor(initializer, { queue=Infinity, cancelSignal: cancelable=cancelSignalNever }={}) {
+        const cancelSignal = cancelable[Symbol.cancelSignal]()
+
         const maxSize = queue
         if (typeof queue !== 'number') {
             throw new Error(`Only queue size is currently supported`)
@@ -30,409 +50,382 @@ export default class Stream {
             throw new Error(`Expected a function as first argument to Stream`)
         }
         if (typeof maxSize !== 'number' || maxSize < 0) {
-            throw new Error(`maxSize must be a positive or 0 number`)
+            throw new Error(`queue must be a positive or 0 number`)
         }
-        this._queue = []
-        this._waiting = []
-        this._state = 'empty'
-        this._cleanedUp = null
-        this._finished = null
-        this._completion = null
 
-        // eslint-disable-next-line complexity
-        const _yield = value => {
-            if (this._state === 'waiting') {
-                // If any consumers are waiting then we can simply
-                // resume the first one
-                const consumer = this._waiting.shift()
-                if (this._waiting.length === 0) {
-                    this._state = 'empty'
+        this._cancelled = false
+        if (cancelSignal.signaled) {
+            this._state = Object.freeze({ name: 'complete' })
+            this._cancelled = true
+            return
+        } else {
+            cancelSignal.subscribe(_ => {
+                this._cancelled = true
+                if (this._state.name === 'empty'
+                || this._state.name === 'queued') {
+                    const cleanedUp = this._doCleanup(this._state.cleanupOperation)
+                    this._state = Object.freeze({
+                        name: 'cleanupPending',
+                        cleanedUp,
+                    })
+                    return cleanedUp.then(_ => {
+                        this._state = Object.freeze({
+                            name: 'complete',
+                        })
+                        return undefined
+                    }, cleanupError => {
+                        this._state = Object.freeze({
+                            name: 'complete',
+                        })
+                        throw cleanupError
+                    })
+                } else if (this._state.name === 'endQueued') {
+                    const cleanedUp = this._state.cleanedUp
+                    this._state = Object.freeze({
+                        name: 'cleanupPending',
+                        cleanedUp,
+                    })
+                    return cleanedUp.then(_ => undefined)
+                } else if (this._state.name === 'waiting'
+                || this._state.name === 'endWaiting') {
+                    const cleanedUp = this._doCleanup(this._state.cleanupOperation)
+                    const waitingQueue = this._state.waitingQueue
+                    for (const waiter of waitingQueue) {
+                        waiter.reject(
+                            new CancelError('Stream has been cancelled so request cannot be fulfilled'),
+                        )
+                    }
+                    if (this._state.name === 'endWaiting') {
+                        this._state.endWaiter.reject(
+                            new CancelError('Stream has been cancelled so request cannot be fulfilled'),
+                        )
+                    }
+                    this._state = Object.freeze({
+                        name: 'cleanupPending',
+                        cleanedUp,
+                    })
+                    cleanedUp.finally(_ => {
+                        this._state = Object.freeze({ name: 'complete' })
+                    })
+                    return cleanedUp.then(_ => undefined)
+                } else if (this._state.name === 'cleanupPending') {
+                    return this._state.cleanedUp.then(_ => undefined)
+                } else if (this._state.name === 'complete') {
+                    return Promise.resolve()
+                } else {
+                    throw new Error('Impossible state, please file a bug report')
                 }
-                consumer.resolve({
-                    done: false,
-                    value,
-                })
-            } else if (this._state === 'empty' || this._state === 'queued') {
+            })
+        }
+
+        const _yield = value => {
+            if (this._state.name === 'empty'
+            || this._state.name === 'queued') {
                 // If we're currently empty or queueing then we'll just append
                 // to our queue
-                this._queue.push(value)
+                const itemQueue = this._state.itemQueue
+                itemQueue.push(value)
                 // And pop off any excess elements in the queue
-                if (this._queue.length > maxSize) {
-                    this._queue.shift()
+                if (itemQueue.length > maxSize) {
+                    itemQueue.shift()
                 }
                 // Only if any items are actually in the queue should
                 // we change to the queued state
-                if (this._queue.length > 0) {
-                    this._state = 'queued'
+                if (itemQueue.length > 0) {
+                    this._state = {
+                        ...this._state,
+                        name: 'queued',
+                    }
                 }
-            } else if (this._state === 'endWaiting') {
-                const consumer = this._waiting.shift()
-                if (this._waiting.length === 0) {
-                    this._beginCleanup()
-                    this._cleanedUp.then(_ => {
-                        this._endCleanup()
-                        this._finished.resolve({
-                            done: true,
-                            value: undefined,
-                        })
-                        this._finished = null
-                    }, cleanupError => {
-                        this._endCleanup()
-                        this._finished.reject(cleanupError)
-                        this._finished = null
-                    })
+            } else if (this._state.name === 'waiting') {
+                // If any consumers are waiting then we can simply
+                // resume the first one
+                const waitingQueue = this._state.waitingQueue
+                const consumer = waitingQueue.shift()
+                if (waitingQueue.length === 0) {
+                    this._state = {
+                        ...this._state,
+                        name: 'empty',
+                    }
                 }
                 consumer.resolve({
                     done: false,
                     value,
                 })
-            } else if (this._state === 'endNext'
-            || this._state === 'endQueued'
-            || this._state === 'cleanup'
-            || this._state === 'complete') {
-                return
-            } else {
-                throw new Error(`Unknown state, please file a bug report`)
-            }
-        }
+            } else if (this._state.name === 'endWaiting') {
+                const waitingQueue = this._state.waitingQueue
+                const consumer = waitingQueue.shift()
 
-        // eslint-disable-next-line complexity, max-statements
-        const _throw = error => {
-            if (this._state === 'waiting') {
-                // Reject the first consumer with the error
-                // after finishing cleanup
-                this._beginCleanup()
-                const consumer = this._waiting.shift()
-                this._cleanedUp.then(_ => {
-                    this._endCleanup()
-                    consumer.reject(error)
-                }, cleanupError => {
-                    this._endCleanup()
-                    consumer.reject(cleanupError)
+                consumer.resolve({
+                    done: false,
+                    value,
                 })
-                // Then all remaining consumers will be resolved
-                // with { done: true }
-                while (this._waiting.length) {
-                    const excessConsumer = this._waiting.shift()
-                    this._cleanedUp.then(_ => {
-                        excessConsumer.resolve({
-                            done: true,
-                            value: undefined,
-                        })
-                    })
-                }
-            } else if (this._state === 'empty') {
-                this._state = 'endNext'
-                this._completion = { type: 'throw', value: error }
-                this._beginCleanup(false)
-            } else if (this._state === 'queued') {
-                this._state = 'endQueued'
-                this._completion = { type: 'throw', value: error }
-                this._beginCleanup(false)
-            } else if (this._state === 'endWaiting') {
-                const consumer = this._waiting.shift()
-                this._beginCleanup()
-                this._cleanedUp.then(_ => {
-                    this._endCleanup()
-                    consumer.reject(error)
-                }, cleanupError => {
-                    this._endCleanup()
-                    consumer.reject(cleanupError)
-                })
-                // Then all remaining consumers will be resolved
-                // with { done: true }
-                while (this._waiting.length) {
-                    const excessConsumer = this._waiting.shift()
-                    this._cleanedUp.then(_ => {
-                        excessConsumer.resolve({
-                            done: true,
-                            value: undefined,
-                        })
-                    })
-                }
-                // Finally resolve the finisher when cleanup is finished
-                this._cleanedUp.then(_ => {
-                    this._finished.resolve({
-                        done: true,
-                        value: undefined,
-                    })
-                })
-            } else if (this._state === 'endNext'
-            || this._state === 'endQueued'
-            || this._state === 'cleanup'
-            || this._state === 'complete') {
-                return
-            }
-        }
 
-        // eslint-disable-next-line complexity, max-statements
-        const _return = value => {
-            if (this._state === 'waiting') {
-                // Reject the first consumer with the error
-                // after finishing cleanup
-                this._beginCleanup()
-                const consumer = this._waiting.shift()
-                this._cleanedUp.then(_ => {
-                    this._endCleanup()
-                    consumer.resolve({
-                        done: true,
-                        value,
-                    })
-                }, cleanupError => {
-                    this._endCleanup()
-                    consumer.reject(cleanupError)
-                })
-                // Then all remaining consumers will be resolved
-                // with { done: true }
-                while (this._waiting.length) {
-                    const excessConsumer = this._waiting.shift()
-                    this._cleanedUp.then(_ => {
-                        excessConsumer.resolve({
-                            done: true,
-                            value: undefined,
-                        })
-                    })
-                }
-            } else if (this._state === 'empty') {
-                this._state = 'endNext'
-                this._completion = { type: 'return', value }
-                this._beginCleanup(false)
-            } else if (this._state === 'queued') {
-                this._state = 'endQueued'
-                this._completion = { type: 'return', value }
-                this._beginCleanup(false)
-            } else if (this._state === 'endWaiting') {
-                const consumer = this._waiting.shift()
-                this._beginCleanup()
-                this._cleanedUp.then(_ => {
-                    this._endCleanup()
-                    consumer.resolve({
-                        done: true,
-                        value,
-                    })
-                }, cleanupError => {
-                    this._endCleanup()
-                    consumer.reject(cleanupError)
-                })
-                // Then all remaining consumers will be resolved
-                // with { done: true }
-                while (this._waiting.length) {
-                    const excessConsumer = this._waiting.shift()
-                    this._cleanedUp.then(_ => {
-                        excessConsumer.resolve({
-                            done: true,
-                            value: undefined,
-                        })
-                    })
-                }
-                // Finally resolve the finisher when cleanup is finished
-                this._cleanedUp.then(_ => {
-                    this._finished.resolve({
-                        done: true,
-                        value: undefined,
-                    })
-                })
-            } else if (this._state === 'endNext'
-            || this._state === 'endQueued'
-            || this._state === 'cleanup'
-            || this._state === 'complete') {
-                return
-            }
-        }
-
-        const cleanup = initializer({
-            [Symbol.toStringTag]: 'StreamController',
-            yield: _yield,
-            next: _yield,
-            throw: _throw,
-            error: _throw,
-            return: _return,
-            complete: _return,
-        })
-        this._cleanup = typeof cleanup === 'function'
-            ? cleanup
-            : doNothing
-    }
-
-    _beginCleanup(setState=true) {
-        if (setState) {
-            this._state = 'cleanup'
-        }
-        this._cleanedUp = Promise.resolve()
-            .then(_ => Reflect.apply(this._cleanup, undefined, []))
-    }
-
-    _endCleanup() {
-        this._state = 'complete'
-        this._cleanedUp = null
-    }
-
-    // eslint-disable-next-line complexity, max-statements
-    next() {
-        if (this._state === 'empty' || this._state === 'waiting') {
-            this._state = 'waiting'
-            const whenReceived = deferred()
-            this._waiting.push(whenReceived)
-            return whenReceived.promise
-        } else if (this._state === 'queued') {
-            const value = this._queue.shift()
-            if (this._queue.length === 0) {
-                this._state = 'empty'
-            }
-            return Promise.resolve({
-                done: false,
-                value,
-            })
-        } else if (this._state === 'endQueued') {
-            const value = this._queue.shift()
-            if (this._queue.length === 0) {
-                this._state = 'endNext'
-            }
-            return Promise.resolve({
-                done: false,
-                value,
-            })
-        } else if (this._state === 'endNext') {
-            const { type, value } = this._completion
-            this._completion = null
-            if (type === 'return') {
-                return this._cleanedUp.then(_ => {
-                    // If cleanup succeeded then we can simply return
-                    // the completion value
-                    this._endCleanup()
-                    return {
-                        done: true,
-                        value
+                if (waitingQueue.length === 0) {
+                    const endWaiter = this._state.endWaiter
+                    const cleanedUp
+                        = this._doCleanup(this._state.cleanupOperation)
+                    this._state = {
+                        name: 'cleanupPending',
+                        cleanedUp,
                     }
-                }, cleanupError => {
-                    // Otherwise if it failed then we will throw the cleanup's
-                    // error
-                    this._endCleanup()
-                    throw cleanupError
-                })
-            } else if (type === 'throw') {
-                return this._cleanedUp.then(_ => {
-                    // If cleanup succeeded then we can simply throw the
-                    // completion value
-                    this._endCleanup()
-                    throw value
-                }, cleanupError => {
-                    // Otherwise if it failed then we will throw the cleanup's
-                    // error
-                    this._endCleanup()
-                    throw cleanupError
-                })
-            } else {
-                throw new Error(`Invalid state, please file a bug report`)
-            }
-        } else if (this._state === 'endWaiting') {
-            // If we're currently waiting for the end then we'll follow
-            // the requested return
-            return this._finished.promise.then(_ => {
-                return {
-                    done: true,
-                    value: undefined,
+                    cleanedUp.then(_ => {
+                        this._state = { name: 'complete' }
+                        endWaiter.resolve({
+                            done: true,
+                            value: undefined,
+                        })
+                    }, error => {
+                        this._state = { name: 'complete' }
+                        endWaiter.reject(error)
+                    })
                 }
+            } else {
+                /* Nothing to do all other states */
+            }
+        }
+
+        const completionMethod = type => value => {
+            if (this._state.name === 'empty') {
+                const cleanupOperation = this._state.cleanupOperation
+                this._state = Object.seal({
+                    name: 'endNext',
+                    completionValue: { type, value },
+                    cleanedUp: this._doCleanup(cleanupOperation),
+                })
+            } else if (this._state.name === 'queued') {
+                this._state = Object.seal({
+                    name: 'endQueued',
+                    itemQueue: this._state.itemQueue,
+                    completionValue: { type, value },
+                    cleanedUp: this._doCleanup(this._state.cleanupOperation),
+                })
+            } else if (this._state.name === 'waiting'
+            || this._state.name === 'endWaiting') {
+                const waitingQueue = this._state.waitingQueue
+                const consumer = waitingQueue.shift()
+                const cleanedUp = this._doCleanup(this._state.cleanupOperation)
+
+                cleanedUp.then(_ => {
+                    this._state = Object.seal({ name: 'complete' })
+                    if (type === 'throw') {
+                        consumer.reject(value)
+                    } else {
+                        consumer.resolve({ done: true, value })
+                    }
+                })
+
+                while (waitingQueue.length) {
+                    const extraConsumer = waitingQueue.shift()
+                    const resolveConsumer = () => {
+                        extraConsumer.resolve({
+                            done: true,
+                            value: undefined,
+                        })
+                    }
+                    cleanedUp.then(resolveConsumer, resolveConsumer)
+                }
+
+                if (this._state.name === 'endWaiting') {
+                    const endWaiter = this._state.endWaiter
+                    const resolveEnd = () => endWaiter.resolve({ done: true, value: undefined })
+                    cleanedUp.then(resolveEnd, resolveEnd)
+                }
+                this._state = Object.seal({
+                    name: 'cleanupPending',
+                    cleanedUp,
+                })
+            }
+        }
+
+        const _throw = completionMethod('throw')
+        const _return = completionMethod('return')
+
+        let cleanupAfterInitialization = false
+        let cleanupComplete
+        this._state = Object.seal({
+            name: 'empty',
+            itemQueue: [],
+            waitingQueue: [],
+            cleanupOperation: () => {
+                cleanupAfterInitialization = true
+                cleanupComplete = deferred()
+                return cleanupComplete.promise
+            },
+        })
+
+        const realCleanup = initializer(Object.freeze({
+            [Symbol.toStringTag]: 'StreamController',
+            cancelSignal: cancelable,
+            yield: _yield,
+            throw: _throw,
+            return: _return,
+            next: _yield,
+            error: _throw,
+            complete: _return,
+        }))
+
+        const cleanupOperation = typeof realCleanup === 'function' ? realCleanup : doNothing
+
+        if (cleanupAfterInitialization) {
+            this._doCleanup(cleanupOperation, cleanupComplete)
+        } else {
+            this._state.cleanupOperation = cleanupOperation
+        }
+    }
+
+    get cancelled() {
+        return this._cancelled
+    }
+
+    async _doCleanup(cleanupOperation, _deferred=deferred()) {
+        try {
+            await cleanupOperation()
+            _deferred.resolve(undefined)
+        } catch (err) {
+            _deferred.reject(err)
+        }
+        return _deferred.promise
+    }
+
+    next() {
+        if (this._cancelled) {
+            return Promise.reject(
+                new CancelError('Stream has been cancelled and can no longer be used'),
+            )
+        } else if (this._state.name === 'waiting' || this._state.name === 'empty') {
+            const futureValue = deferred()
+            this._state.waitingQueue.push(futureValue)
+            this._state = Object.seal({
+                ...this._state,
+                name: 'waiting',
             })
-        } else if (this._state === 'cleanup') {
-            // If we're currently cleaning up then we'll
-            // follow from the cleanup
+            return futureValue.promise
+        } else if (this._state.name === 'queued') {
+            const value = this._state.itemQueue.shift()
+            if (this._state.itemQueue.length === 0) {
+                this._state = Object.seal({
+                    ...this._state,
+                    name: 'empty',
+                })
+            }
+            return Promise.resolve({
+                done: false,
+                value,
+            })
+        } else if (this._state.name === 'endQueued') {
+            const value = this._state.itemQueue.shift()
+            if (this._state.itemQueue.length === 0) {
+                this._state = Object.seal({
+                    name: 'endNext',
+                    completionValue: this._state.completionValue,
+                    cleanedUp: this._state.cleanedUp,
+                })
+            }
+            return Promise.resolve({
+                done: false,
+                value,
+            })
+        } else if (this._state.name === 'endNext') {
+            const completion = this._state.completionValue
+            const cleanedUp = this._state.cleanedUp
+
+            this._state = Object.seal({
+                name: 'cleanupPending',
+                cleanedUp,
+            })
+
+            return cleanedUp.then(_ => {
+                this._state = Object.seal({ name: 'complete' })
+                if (completion.type === 'return') {
+                    return { done: true, value: completion.value }
+                } else {
+                    throw completion.value
+                }
+            }, cleanupError => {
+                this._state = Object.seal({ name: 'complete' })
+                throw cleanupError
+            })
+        } else if (this._state.name === 'endWaiting') {
+            return this._state.endWaiter.promise.then(_ => {
+                return { done: true, value: undefined }
+            })
+        } else if (this._state.name === 'cleanupPending') {
             const doneTrue = _ => {
                 return {
                     done: true,
                     value: undefined,
                 }
             }
-            return this._cleanedUp.then(doneTrue, doneTrue)
-        } else if (this._state === 'complete') {
-            // If we're already complete then we'll simply return
-            // that we're done
+            return this._state.cleanedUp.then(doneTrue, doneTrue)
+        } else if (this._state.name === 'complete') {
             return Promise.resolve({
                 done: true,
                 value: undefined,
             })
         } else {
-            throw new Error(`Invalid state, please file a bug report`)
+            throw new Error('Impossible state, please file a bug report')
         }
     }
 
-    // eslint-disable-next-line complexity, max-statements
-    return() {
-        if (this._state === 'empty' || this._state === 'queued') {
-            // Regardless of what values are in the queue we can simply
-            // discard them
-            this._queue = []
-            this._beginCleanup()
-            return this._cleanedUp.then(_ => {
-                // If cleanup succeeded then we can just retun { done: true }
-                this._endCleanup()
-                return {
-                    done: true,
-                    value: undefined,
-                }
+    return(returnValue=undefined) {
+        if (this._cancelled) {
+            return Promise.reject(
+                new CancelError('Stream has been cancelled and can no longer be used'),
+            )
+        } else if (this._state.name === 'empty'
+        || this._state.name === 'queued') {
+            const cleanedUp = this._doCleanup(this._state.cleanupOperation)
+            this._state = Object.freeze({
+                name: 'cleanupPending',
+                cleanedUp,
+            })
+            return cleanedUp.then(_ => {
+                this._state = Object.freeze({ name: 'complete' })
+                return { done: true, value: returnValue }
             }, cleanupError => {
-                // Otherwise end cleanup and throw the cleanup error
-                this._endCleanup()
+                this._state = Object.freeze({ name: 'complete' })
                 throw cleanupError
             })
-        } else if (this._state === 'waiting') {
-            // If anything is waiting then we'll add ourselves to the waiting
-            this._state = 'endWaiting'
-            this._finished = deferred()
-            return this._finished.promise
-        } else if (this._state === 'endWaiting') {
-            // If we're already waiting for completion we'll follow when
-            // completion is done
-            const doneTrue = _ => ({ done: true, value: undefined })
-            return this._finished.promise.then(doneTrue, doneTrue)
-        } else if (this._state === 'endNext' || this._state === 'endQueued') {
-            // If a throw/return is already enqueued then we can simply
-            // follow from it
-            const { type, value } = this._completion
-            this._completion = null
-            this._queue = []
-            if (type === 'return') {
-                return this._cleanedUp.then(_ => {
-                    // If cleanup succeeded then we can simply return
-                    // the completion value
-                    this._endCleanup()
-                    return {
-                        done: true,
-                        value
-                    }
-                }, cleanupError => {
-                    // Otherwise if it failed then we will throw the cleanup's
-                    // error
-                    this._endCleanup()
-                    throw cleanupError
-                })
-            } else if (type === 'throw') {
-                return this._cleanedUp.then(_ => {
-                    // If cleanup succeeded then we can simply throw the
-                    // completion value
-                    this._endCleanup()
-                    throw value
-                }, cleanupError => {
-                    // Otherwise if it failed then we will throw the cleanup's
-                    // error
-                    this._endCleanup()
-                    throw cleanupError
-                })
-            } else {
-                throw new Error(`Invalid state, please file a bug report`)
+        } else if (this._state.name === 'waiting') {
+            const endWaiter = deferred()
+            this._state = {
+                name: 'endWaiting',
+                endWaiter,
+                waitingQueue: this._state.waitingQueue,
+                cleanupOperation: this._state.cleanupOperation,
             }
-        } else if (this._state === 'cleanup') {
-            // If we're already cleaning up we can simply follow from it
-            const doneTrue = _ => ({ done: true, value: undefined })
-            return this._cleanup.then(doneTrue, doneTrue)
-        } else if (this._state === 'complete') {
-            // If we're complete then we can simply return
-            return Promise.resolve({
-                done: true,
-                value: undefined,
+            return endWaiter.promise
+        } else if (this._state.name === 'endWaiting') {
+            const doneTrue = _ => ({ done: true, value: returnValue })
+            const endWaiter = this._state.endWaiter
+            return endWaiter.promise.then(doneTrue, doneTrue)
+        } else if (this._state.name === 'endNext'
+        || this._state.name === 'endQueued') {
+            const completion = this._state.completionValue
+            const cleanedUp = this._state.cleanedUp
+            this._state = Object.freeze({
+                name: 'cleanupPending',
+                cleanedUp: this._state.cleanedUp,
             })
+            return cleanedUp.then(_ => {
+                this._state = Object.freeze({ name: 'complete' })
+                if (completion.type === 'return') {
+                    return { done: true, value: completion.value }
+                } else {
+                    throw completion.value
+                }
+            }, cleanupError => {
+                this._state = Object.freeze({ name: 'complete' })
+                throw cleanupError
+            })
+        } else if (this._state.name === 'cleanupPending') {
+            const doneTrue = _ => ({ done: true, value: returnValue })
+            return this._state.cleanedUp.then(doneTrue, doneTrue)
+        } else if (this._state.name === 'complete') {
+            return Promise.resolve({ done: true, value: returnValue })
         } else {
-            throw new Error(`Unknown state, please file a bug report`)
+            throw new Error('Impossible state, please file a bug report')
         }
     }
 

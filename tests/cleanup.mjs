@@ -15,13 +15,27 @@ test('cleanup is called on ending a sequence early', async t => {
     t.true(cleanedUp)
 })
 
-test.failing("cleanup doesn't happen early if we're still waiting", async t => {
+test("cleanup doesn't happen early if we're still waiting", async t => {
     let cleanedUp = false
     let streamController
     const stream = new Stream(stream => {
         streamController = stream
+        return _ => {
+            cleanedUp = true
+        }
     })
-    // TODO: complete this
+    const item = stream.next()
+    const item2 = stream.next()
+    const closed = stream.return()
+    t.false(cleanedUp)
+    streamController.yield(3)
+    streamController.yield(4)
+    const value = await item
+    t.deepEqual({ done: false, value: 3 }, value)
+    const value2 = await item2
+    t.deepEqual({ done: false, value: 4 }, value2)
+    t.deepEqual({ done: true, value: undefined }, await closed)
+    t.true(cleanedUp)
 })
 
 test('cleanup is called on normal completion of a sequence', async t => {

@@ -4,7 +4,7 @@
     "description": "Stream is a single type like Promise representing a sequence of values instead of just one",
     "main": "Stream.js",
     "scripts": {
-        "test": "ava --verbose"
+        "test": "ava"
     },
     "author": "James \"The Jamesernator\" Browning",
     "license": "MIT",
@@ -12,7 +12,9 @@
         "esm": "^3.0.77"
     },
     "devDependencies": {
-        "ava": "^1.0.0-beta.7"
+        "ava": "^1.0.0-beta.7",
+        "babel-eslint": "^8.2.6",
+        "eslint": "^5.4.0"
     },
     "ava": {
         "babel": false,
