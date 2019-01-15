@@ -1,22 +1,7 @@
 import test from "ava"
 import Stream from "../Stream.mjs"
 import deferred from "./_helpers/deferred.mjs"
-
-class NotResolved extends Error {}
-
-/* This tests that a promise is already resolved */
-async function isResolved(promise) {
-    try {
-        await Promise.race([promise, Promise.reject(new NotResolved())])
-        return true
-    } catch (err) {
-        if (err instanceof NotResolved) {
-            return false
-        } else {
-            throw err
-        }
-    }
-}
+import isResolved from "./_helpers/isResolved.mjs"
 
 test('next resolves with values that have already been enqueued', async t => {
     const s = new Stream(stream => {
