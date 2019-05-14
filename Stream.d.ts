@@ -15,10 +15,6 @@ interface CancelSignal {
     subscribe(cb: () => void): CancelSubscription
 }
 
-interface Cancelable {
-    [Symbol.cancelSignal](): CancelSignal
-}
-
 export interface StreamController<T, R> {
     yield(value: T): void
     return(value: R): void
@@ -28,7 +24,7 @@ export interface StreamController<T, R> {
     return(value: R): void
     throw(value: any): void
 
-    cancelSignal: Cancelable
+    cancelSignal: CancelSignal
 }
 
 export interface StreamInitializer<T, R> {
@@ -38,7 +34,7 @@ export interface StreamInitializer<T, R> {
 
 export interface StreamOptions {
     queue?: number
-    cancelSignal?: Cancelable
+    cancelSignal?: CancelSignal
 }
 
 export type IteratorResult<T, R>
