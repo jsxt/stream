@@ -100,3 +100,33 @@ The `.return` method (and its alias `.complete`) will cause the stream to become
 ### Default Queue
 
 The default queue is a simple FIFO queue with infinite length.
+
+
+### State Overview
+
+In order for the stream to clean up at an appropriate time every stream object has a current state. These are similar to Promise objects which have `pending`, `fulfilled` and `rejected` states.
+
+Here's the full state diagram. It's just a teensy tiny bit more complicated than the Promise one:
+
+![a diagram showing all the states of the stream](./stream.svg)
+
+Okay so it's a bit more complicated than the Promise one but it guarantees that all `.next`/`.return` calls will be appropriately fulfilled if they have been requested.
+
+The following table explains precisely what each method does when in each possible state:
+
+<table>
+    <thead>
+        <td>
+        <td><b>maybeQueued</b></td>
+        <td><b>endQueued</b></td>
+        <td><b>waitingForValue</b></td>
+        <td><b>waitingForEnd</b></td>
+        <td><b>waitingForCleanupToFinish</b></td>
+        <td><b>complete</b></td>
+    <tr>
+        <td><code>stream.next</code></td>
+        <td>
+            If the queue has items in it, it will resolve with the first item in the queue.
+            <p>Else if the queue is empty we'll add this <code>
+
+</table>
