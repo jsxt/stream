@@ -1,5 +1,5 @@
 import test from "ava"
-import Stream from "../Stream.js"
+import Stream from "../Stream.mjs"
 
 test('cleanup is called on ending a sequence early', async t => {
     let cleanedUp = false

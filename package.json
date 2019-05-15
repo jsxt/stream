@@ -5,7 +5,8 @@
     "description": "Stream is a single type like Promise representing a sequence of values instead of just one",
     "main": "Stream.js",
     "scripts": {
-        "test": "ava"
+        "test": "ava",
+        "build": "tsc --target esnext Stream.ts && mv Stream.js Stream.mjs"
     },
     "author": "James \"The Jamesernator\" Browning",
     "license": "MIT",
@@ -21,10 +22,10 @@
     "ava": {
         "babel": false,
         "extensions": [
-            "js"
+            "mjs"
         ],
         "files": [
-            "tests/*.js"
+            "tests/*.mjs"
         ],
         "require": [
             "esm"

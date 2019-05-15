@@ -1,12 +1,11 @@
-// @ts-check
 /// <reference lib="esnext" />
 
 class Deferred<T> {
-    private _resolve!: (value: T) => void;
+    private _resolve!: (value: T) => void
 
-    private _reject!: (error: any) => void;
+    private _reject!: (error: any) => void
 
-    private _promise: Promise<T>;
+    private _promise: Promise<T>
 
     constructor() {
         this._promise = new Promise((resolve, reject) => {
@@ -29,13 +28,13 @@ const doNothing = () => {
 }
 
 interface AbstractQueue<T> {
-    isEmpty: boolean;
-    enqueue: (value: T) => void;
-    dequeue: () => T;
+    isEmpty: boolean
+    enqueue: (value: T) => void
+    dequeue: () => T
 }
 
 export class Queue<T> implements AbstractQueue<T> {
-    private _queue: Set<{ value: T} > = new Set();
+    private _queue: Set<{ value: T} > = new Set()
 
     get isEmpty() {
         return this._queue.size === 0
@@ -121,17 +120,17 @@ class UnreachableError extends Error {
     }
 }
 
-type StreamInitializer<T> = (controller: StreamController<T>) => CleanupCallback | void;
+type StreamInitializer<T> = (controller: StreamController<T>) => CleanupCallback | void
 
 type StreamOptions<T> = {
     queue?: AbstractQueue<T>,
 }
 
 export default class Stream<T> {
-    _state: Readonly<StreamState<T>>;
+    _state: Readonly<StreamState<T>>
 
     constructor(initializer: StreamInitializer<T>, options: StreamOptions<T>={}) {
-        const { queue=new Queue<T>() } = options;
+        const { queue=new Queue<T>() } = options
 
         if (typeof initializer !== 'function') {
             throw new TypeError("Initializer must be a function")
@@ -180,7 +179,7 @@ export default class Stream<T> {
                     ...state,
                     cleanupOperation,
                 })
-                return;
+                return
             }
             this._state = Object.freeze({
                 ...state,
@@ -194,7 +193,7 @@ export default class Stream<T> {
             const state = this._state
             if (state.name === 'maybeQueued') {
                 state.itemQueue.enqueue(value)
-                return;
+                return
             } else if (state.name === 'waitingForValue') {
                 const waitingQueue = state.waitingQueue
                 const resolver = waitingQueue.dequeue()
@@ -229,7 +228,9 @@ export default class Stream<T> {
 
                     cleanedUp.then(() => {
                         this._state = Object.freeze({ name: 'complete' })
-                        endWaiter.resolver.resolve({ done: true, value: undefined })
+                        // HACK: Stupid coercion because IteratorResult<T>
+                        // is broken in TypeScript
+                        endWaiter.resolver.resolve({ done: true, value: undefined as unknown as T })
                     }, error => {
                         this._state = Object.freeze({ name: 'complete' })
                         endWaiter.resolver.reject(error)
