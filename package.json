@@ -1,6 +1,7 @@
 {
     "name": "@jx/stream",
-    "version": "0.0.3",
+    "type": "module",
+    "version": "1.0.0",
     "description": "Stream is a single type like Promise representing a sequence of values instead of just one",
     "main": "Stream.js",
     "scripts": {
@@ -9,20 +10,21 @@
     "author": "James \"The Jamesernator\" Browning",
     "license": "MIT",
     "dependencies": {
-        "esm": "^3.0.77"
+        "esm": "^3.2.22",
+        "typescript": "^3.4.5"
     },
     "devDependencies": {
-        "ava": "^1.0.0-beta.7",
-        "babel-eslint": "^8.2.6",
-        "eslint": "^5.4.0"
+        "ava": "^1.4.1",
+        "babel-eslint": "^10.0.1",
+        "eslint": "^5.16.0"
     },
     "ava": {
         "babel": false,
         "extensions": [
-            "mjs"
+            "js"
         ],
         "files": [
-            "tests/*.mjs"
+            "tests/*.js"
         ],
         "require": [
             "esm"

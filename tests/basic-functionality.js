@@ -1,5 +1,5 @@
 import test from "ava"
-import Stream from "../Stream.mjs"
+import Stream from "../Stream.js"
 
 test('constructor works and methods exist', t => {
     const s = new Stream(stream => stream.return())

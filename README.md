@@ -3,17 +3,72 @@
 
 ### Introduction
 
-Soon JavaScript will be getting [asynchronous iterators and asychronous generators](https://github.com/tc39/proposal-async-iteration), however the proposal doesn't include any way for creating an asynchronous sequence from existing asynchronous operations.
+The JavaScript language now has [async iterators and async generators](https://jakearchibald.com/2017/async-iterators-and-generators/), however not included is a way to create async iterators from existing data sources.
 
-This library intends to fill that void by providing a single concrete type which has large similarties to the Promise type, it also borrows ideas from the [obervable proposal](https://github.com/tc39/proposal-observable) in its minimal API design and use of an observer object.
+This library is designed to fill that void by providing a single concrete type with a lot of similarities to the Promise type. It also borrows ideas from the [observable proposal](https://github.com/tc39/proposal-observable) and allows any observer to also be used as the first argument to `Stream`.
 
 *NOTE: Like the Observable proposal the goal of Stream is to have minimal API surface which is why Stream does't include any operators such as `.map`/`.filter`/etc, those should provided by some other library*
 
+### Examples
+
+```js
+const interval = new Stream(stream => {
+    setInterval(stream.yield, 1000)
+})
+
+for await (const _ of interval) {
+    console.log("Tick")
+}
+```
+
+```js
+function mediaChunks(mediaRecorder, stopWhen) {
+    return new Stream(stream => {
+        mediaRecorder.ondataavailable = ({ data }) => stream.yield(data)
+        stopWhen(stream.return)
+    })
+}
+
+const userVoice = await navigator.mediaDevices.getUserMedia({ audio: true })
+const stopWhen = callback => setTimeout(stopWhen, 10000)
+
+const recorder = new MediaRecorder(userVoice)
+
+for await (const chunk of mediaChunks(recorder, stopWhen)) {
+    // Even if db.append is slow the rest of the chunks will still be queued
+    await db.table(filename).append(chunk)
+}
+```
+
 ### API
+
+#### `new Stream(initializer, { queue=new Queue() }={})`
+
+```ts
+type CleanupCallback = () => (void | Promise<void>)
+
+type StreamOptions = {
+    queue?: AbstractQueue,
+}
+
+export default class Stream<T> {
+    constructor(
+        initializer: (controller: StreamController) => void | CleanupCallback,
+        options?: StreamOptions,
+    )
+}
+```
+
+The `Stream` constructor requires a single paramater as it's first argument, the initializer will be called
+immediately a `StreamController` object, it may optionally return a single function that will be called
+when cleanup is started and the stream is complete.
+
+Optionally as a second argument the 
 
 #### `stream` Objects
 
 Objects referred to here as "streams" are those objects returned by the `Stream` constructor, the purpose of a Stream object is to behave as an async iterable for some asynchronous collection (e.g. clicks on an element, ticks on a clock, etc).
+
 
 
 #### `new Stream(initializer: function, { queue: number=Infinity, cancelSignal: CancelSignal=CancelSignal.never }={})`

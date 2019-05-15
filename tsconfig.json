@@ -1,6 +1,7 @@
 
 {
   "compilerOptions": {
+    "downlevelIteration": true,
     "target": "esnext",
     "lib": ["esnext"],
     "strict": true

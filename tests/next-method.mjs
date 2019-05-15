@@ -1,7 +1,7 @@
 import test from "ava"
-import Stream from "../Stream.mjs"
-import deferred from "./_helpers/deferred.mjs"
-import isResolved from "./_helpers/isResolved.mjs"
+import Stream from "../Stream.js"
+import deferred from "./_helpers/deferred.js"
+import isResolved from "./_helpers/isResolved.js"
 
 test('next resolves with values that have already been enqueued', async t => {
     const s = new Stream(stream => {
