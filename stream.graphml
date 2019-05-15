@@ -17,7 +17,7 @@
     <node id="n0">
       <data key="d6">
         <y:ShapeNode>
-          <y:Geometry height="30.0" width="86.24609375" x="420.02615947420634" y="0.0"/>
+          <y:Geometry height="30.0" width="86.24609375" x="542.1956039186508" y="0.0"/>
           <y:Fill color="#CCFFCC" transparent="false"/>
           <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Monospaced" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="76.24609375" x="5.0" xml:space="preserve" y="6.015625">new Stream<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
@@ -28,7 +28,7 @@
     <node id="n1">
       <data key="d6">
         <y:ShapeNode>
-          <y:Geometry height="30.0" width="93.470703125" x="393.0459976438492" y="125.93750000000009"/>
+          <y:Geometry height="30.0" width="93.470703125" x="506.9265531994048" y="144.1015625"/>
           <y:Fill color="#99CCFF" transparent="false"/>
           <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Monospaced" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="83.470703125" x="5.0" xml:space="preserve" y="6.015625">maybeQueued<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
@@ -39,7 +39,7 @@
     <node id="n2">
       <data key="d6">
         <y:ShapeNode>
-          <y:Geometry height="30.0" width="122.369140625" x="272.86622333829365" y="365.0234375000001"/>
+          <y:Geometry height="30.0" width="122.369140625" x="359.38368365575394" y="350.3359375"/>
           <y:Fill color="#99CCFF" transparent="false"/>
           <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Monospaced" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="112.369140625" x="5.0" xml:space="preserve" y="6.015625">waitingForValue<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
@@ -50,7 +50,7 @@
     <node id="n3">
       <data key="d6">
         <y:ShapeNode>
-          <y:Geometry height="30.0" width="107.919921875" x="202.72218191964288" y="471.9921875000001"/>
+          <y:Geometry height="30.0" width="107.919921875" x="214.4523406498016" y="557.7421875"/>
           <y:Fill color="#99CCFF" transparent="false"/>
           <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Monospaced" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="97.919921875" x="5.0" xml:space="preserve" y="6.015625">waitingForEnd<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
@@ -61,10 +61,10 @@
     <node id="n4">
       <data key="d6">
         <y:ShapeNode>
-          <y:Geometry height="30.0" width="180.166015625" x="319.33822234623017" y="621.4453125000001"/>
+          <y:Geometry height="30.0" width="194.61523437500006" x="402.59416852678567" y="705.1796875000001"/>
           <y:Fill color="#99CCFF" transparent="false"/>
           <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Monospaced" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="170.166015625" x="5.0" xml:space="preserve" y="6.015625">waitingForCleanupFinish<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Monospaced" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="184.615234375" x="5.0" xml:space="preserve" y="6.015625">waitingForCleanupToFinish<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
           <y:Shape type="rectangle"/>
         </y:ShapeNode>
       </data>
@@ -75,14 +75,14 @@
         <y:ProxyAutoBoundsNode>
           <y:Realizers active="0">
             <y:GroupNode>
-              <y:Geometry height="207.39843750000009" width="333.6996031746031" x="536.2726190476192" y="-36.4609375"/>
+              <y:Geometry height="225.5625" width="236.94206349206348" x="98.05039682539683" y="-36.4609375"/>
               <y:Fill color="#F5F5F5" transparent="false"/>
               <y:BorderStyle color="#000000" type="dashed" width="1.0"/>
-              <y:NodeLabel alignment="right" autoSizePolicy="node_width" backgroundColor="#EBEBEB" borderDistance="0.0" fontFamily="Monospaced" fontSize="15" fontStyle="plain" hasLineColor="false" height="21.4609375" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="t" textColor="#000000" verticalTextPosition="bottom" visible="true" width="333.6996031746031" x="0.0" xml:space="preserve" y="0.0">Legend</y:NodeLabel>
+              <y:NodeLabel alignment="right" autoSizePolicy="node_width" backgroundColor="#EBEBEB" borderDistance="0.0" fontFamily="Monospaced" fontSize="15" fontStyle="plain" hasLineColor="false" height="21.4609375" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="t" textColor="#000000" verticalTextPosition="bottom" visible="true" width="236.94206349206348" x="0.0" xml:space="preserve" y="0.0">Legend</y:NodeLabel>
               <y:Shape type="roundrectangle"/>
               <y:State closed="false" closedHeight="50.0" closedWidth="50.0" innerGraphDisplayEnabled="false"/>
               <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
-              <y:BorderInsets bottom="0" bottomF="0.0" left="83" leftF="82.6956349206348" right="14" rightF="14.06190476190477" top="0" topF="0.0"/>
+              <y:BorderInsets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="0" rightF="0.0" top="0" topF="0.0"/>
             </y:GroupNode>
             <y:GroupNode>
               <y:Geometry height="50.0" width="50.0" x="-130.18443855406747" y="-41.4609375"/>
@@ -101,7 +101,7 @@
         <node id="n5::n0">
           <data key="d6">
             <y:ShapeNode>
-              <y:Geometry height="30.0" width="14.0" x="633.968253968254" y="0.0"/>
+              <y:Geometry height="30.0" width="14.0" x="113.05039682539683" y="0.0"/>
               <y:Fill color="#FFFFFF" transparent="false"/>
               <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Monospaced" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" hasText="false" height="4.0" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="4.0" x="5.0" y="13.0">
@@ -119,7 +119,7 @@
         <node id="n5::n1">
           <data key="d6">
             <y:ShapeNode>
-              <y:Geometry height="30.0" width="14.0" x="633.968253968254" y="125.93750000000009"/>
+              <y:Geometry height="30.0" width="14.0" x="113.05039682539683" y="144.1015625"/>
               <y:Fill color="#FFFFFF" transparent="false"/>
               <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Monospaced" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" hasText="false" height="4.0" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="4.0" x="5.0" y="13.0">
@@ -137,7 +137,7 @@
         <node id="n5::n2">
           <data key="d6">
             <y:ShapeNode>
-              <y:Geometry height="30.0" width="14.0" x="737.6638888888889" y="0.0"/>
+              <y:Geometry height="30.0" width="14.0" x="216.74603174603175" y="0.0"/>
               <y:Fill color="#FFFFFF" transparent="false"/>
               <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Monospaced" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" hasText="false" height="4.0" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="4.0" x="5.0" y="13.0">
@@ -155,7 +155,7 @@
         <node id="n5::n3">
           <data key="d6">
             <y:ShapeNode>
-              <y:Geometry height="30.0" width="14.0" x="737.6638888888889" y="125.93750000000009"/>
+              <y:Geometry height="30.0" width="14.0" x="216.74603174603175" y="144.1015625"/>
               <y:Fill color="#FFFFFF" transparent="false"/>
               <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Monospaced" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" hasText="false" height="4.0" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="4.0" x="5.0" y="13.0">
@@ -173,7 +173,7 @@
         <node id="n5::n4">
           <data key="d6">
             <y:ShapeNode>
-              <y:Geometry height="30.0" width="14.0" x="826.9103174603175" y="0.0"/>
+              <y:Geometry height="30.0" width="14.0" x="305.9924603174603" y="0.0"/>
               <y:Fill color="#FFFFFF" transparent="false"/>
               <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Monospaced" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" hasText="false" height="4.0" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="4.0" x="5.0" y="13.0">
@@ -191,7 +191,7 @@
         <node id="n5::n5">
           <data key="d6">
             <y:ShapeNode>
-              <y:Geometry height="30.0" width="14.0" x="826.9103174603175" y="125.93750000000009"/>
+              <y:Geometry height="30.0" width="14.0" x="305.9924603174603" y="144.1015625"/>
               <y:Fill color="#FFFFFF" transparent="false"/>
               <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Monospaced" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" hasText="false" height="4.0" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="4.0" x="5.0" y="13.0">
@@ -211,7 +211,7 @@
     <node id="n6">
       <data key="d6">
         <y:ShapeNode>
-          <y:Geometry height="30.0" width="79.021484375" x="692.1817181299604" y="365.0234375000001"/>
+          <y:Geometry height="30.0" width="79.021484375" x="784.1071149553571" y="350.3359375"/>
           <y:Fill color="#99CCFF" transparent="false"/>
           <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Monospaced" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="69.021484375" x="5.0" xml:space="preserve" y="6.015625">endQueued<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
@@ -222,7 +222,7 @@
     <node id="n7">
       <data key="d6">
         <y:ShapeNode>
-          <y:Geometry height="30.0" width="71.796875" x="355.5735863095238" y="753.0468750000001"/>
+          <y:Geometry height="30.0" width="71.796875" x="446.0541418650794" y="836.7812500000001"/>
           <y:Fill color="#99CCFF" transparent="false"/>
           <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Monospaced" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="61.796875" x="5.0" xml:space="preserve" y="6.015625">complete<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
@@ -233,7 +233,7 @@
     <edge id="e0" source="n0" target="n1">
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="15.0" tx="23.36767578125" ty="-15.0"/>
+          <y:Path sx="0.0" sy="15.0" tx="31.65690104166663" ty="-15.0"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
           <y:BendStyle smoothed="false"/>
@@ -244,13 +244,13 @@
       <data key="d9" xml:space="preserve"><![CDATA[stream-method]]></data>
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="-12.433837890625" sy="15.0" tx="45.138427734375" ty="-15.0">
-            <y:Point x="427.34761904761905" y="290.0546875000001"/>
-            <y:Point x="379.18922138516865" y="290.0546875000001"/>
+          <y:Path sx="-30.65690104166663" sy="15.0" tx="40.289713541666686" ty="-15.0">
+            <y:Point x="523.0050037202382" y="191.1015625"/>
+            <y:Point x="460.85793650793653" y="191.1015625"/>
           </y:Path>
           <y:LineStyle color="#000000" type="line" width="4.0"/>
           <y:Arrows source="none" target="standard"/>
-          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" height="18.1328125" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="33.77734375" x="-16.888556489490327" xml:space="preserve" y="98.98437500000011">.next<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" height="18.1328125" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="154.615234375" x="-139.45468556237597" xml:space="preserve" y="44.0">.next[if queue.length = 0]<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>
@@ -259,13 +259,13 @@
       <data key="d9" xml:space="preserve"><![CDATA[stream-method]]></data>
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="-29.84228515625" sy="15.0" tx="26.97998046875" ty="-15.0">
-            <y:Point x="304.20850849454365" y="412.0234375000001"/>
-            <y:Point x="283.6623015873016" y="412.0234375000001"/>
+          <y:Path sx="-29.84228515625" sy="15.0" tx="35.473307291666686" ty="-15.0">
+            <y:Point x="390.72596881200394" y="397.3359375"/>
+            <y:Point x="303.8857142857143" y="397.3359375"/>
           </y:Path>
           <y:LineStyle color="#000000" type="line" width="4.0"/>
           <y:Arrows source="none" target="standard"/>
-          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Monospaced" fontSize="12" fontStyle="plain" height="17.96875" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="54.572265625" x="-47.83232731894839" xml:space="preserve" y="44.000000000000114">.return<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Monospaced" fontSize="12" fontStyle="plain" height="17.96875" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="54.572265625" x="-114.12640119280132" xml:space="preserve" y="44.0">.return<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>
@@ -274,158 +274,124 @@
       <data key="d9" xml:space="preserve"><![CDATA[stream-method]]></data>
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="-53.9599609375" sy="0.0" tx="-26.97998046875" ty="-15.0">
-            <y:Point x="95.33302176339288" y="486.9921875000001"/>
-            <y:Point x="95.33302176339288" y="436.0078125000001"/>
-            <y:Point x="229.70216238839288" y="436.0078125000001"/>
+          <y:Path sx="-53.9599609375" sy="-6.75" tx="-35.47330729166667" ty="-15.0">
+            <y:Point x="98.56985367063494" y="565.9921875"/>
+            <y:Point x="98.56985367063494" y="521.7578125"/>
+            <y:Point x="232.93899429563493" y="521.7578125"/>
           </y:Path>
           <y:LineStyle color="#000000" type="line" width="4.0"/>
           <y:Arrows source="none" target="standard"/>
-          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Monospaced" fontSize="12" fontStyle="plain" height="17.96875" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="112.369140625" x="-97.36294686453678" xml:space="preserve" y="-59.968749999999886">.next | .return<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Monospaced" fontSize="12" fontStyle="plain" height="17.96875" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="112.369140625" x="-105.85418807741192" xml:space="preserve" y="-53.21875">.next | .return<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e4" source="n3" target="n4">
+    <edge id="e4" source="n2" target="n2">
       <data key="d9" xml:space="preserve"><![CDATA[controller-method]]></data>
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="15.0" tx="-37.83320312500001" ty="-15.0">
-            <y:Point x="256.6821428571429" y="562.4765625000001"/>
-            <y:Point x="371.58802703373016" y="562.4765625000001"/>
+          <y:Path sx="-61.1845703125" sy="-8.25" tx="-41.78971354166667" ty="-15.0">
+            <y:Point x="115.86643105158726" y="357.0859375"/>
+            <y:Point x="115.86643105158726" y="315.8515625"/>
+            <y:Point x="378.77854042658726" y="315.8515625"/>
           </y:Path>
           <y:LineStyle color="#000000" type="dashed" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
-          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Monospaced" fontSize="12" fontStyle="plain" height="17.96875" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="119.59375" x="-59.79686104910712" xml:space="preserve" y="25.000000000000114">.return | .throw<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Monospaced" fontSize="12" fontStyle="plain" height="17.96875" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="249.63671875" x="-237.0998165070065" xml:space="preserve" y="-50.21874999999994">.yield[if waitingQueue.length &gt; 0]<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e5" source="n2" target="n2">
+    <edge id="e5" source="n2" target="n4">
       <data key="d9" xml:space="preserve"><![CDATA[controller-method]]></data>
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="-61.1845703125" sy="-8.25" tx="-46.638427734375" ty="-15.0">
-            <y:Point x="24.50025654141865" y="371.7734375000001"/>
-            <y:Point x="24.50025654141865" y="330.5390625000001"/>
-            <y:Point x="287.41236591641865" y="330.5390625000001"/>
+          <y:Path sx="31.34228515625" sy="15.0" tx="-3.000000000000001" ty="-15.0">
+            <y:Point x="451.91053912450394" y="395.8359375"/>
+            <y:Point x="477.8646825396825" y="395.8359375"/>
+            <y:Point x="477.8646825396825" y="632.2265625"/>
+            <y:Point x="496.9017857142857" y="632.2265625"/>
           </y:Path>
           <y:LineStyle color="#000000" type="dashed" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
-          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Monospaced" fontSize="12" fontStyle="plain" height="17.96875" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="242.412109375" x="-238.33565044100322" xml:space="preserve" y="-50.218749999999886">.yield if waitingQueue.length &gt; 0<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Monospaced" fontSize="12" fontStyle="plain" height="17.96875" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="119.59375" x="-33.84274543883316" xml:space="preserve" y="188.421875">.return | .throw<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e6" source="n2" target="n4">
+    <edge id="e6" source="n1" target="n1">
       <data key="d9" xml:space="preserve"><![CDATA[controller-method]]></data>
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="31.34228515625" sy="15.0" tx="-3.0" ty="-15.0">
-            <y:Point x="365.39307880704365" y="410.5234375000001"/>
-            <y:Point x="385.9392857142857" y="410.5234375000001"/>
-            <y:Point x="385.9392857142857" y="546.4765625000001"/>
-            <y:Point x="406.42123015873017" y="546.4765625000001"/>
+          <y:Path sx="-46.7353515625" sy="-8.25" tx="-31.656901041666664" ty="-15.0">
+            <y:Point x="454.1573474702381" y="150.8515625"/>
+            <y:Point x="454.1573474702381" y="109.6171875"/>
+            <y:Point x="522.0050037202382" y="109.6171875"/>
           </y:Path>
           <y:LineStyle color="#000000" type="dashed" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
-          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Monospaced" fontSize="12" fontStyle="plain" height="17.96875" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="119.59375" x="-39.25065569196431" xml:space="preserve" y="87.98437500000011">.return | .throw<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Monospaced" fontSize="12" fontStyle="plain" height="17.96875" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="47.34765625" x="-42.74343988327746" xml:space="preserve" y="-50.21875">.yield<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e7" source="n2" target="n1">
+    <edge id="e7" source="n1" target="n6">
       <data key="d9" xml:space="preserve"><![CDATA[controller-method]]></data>
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="14.546142578125" sy="-15.0" tx="-35.801513671875" ty="15.0">
-            <y:Point x="348.59693622891865" y="250.4218750000001"/>
-            <y:Point x="291.14126984126983" y="250.4218750000001"/>
-            <y:Point x="291.14126984126983" y="171.43750000000009"/>
-            <y:Point x="403.9798355344742" y="171.43750000000009"/>
+          <y:Path sx="32.15690104166663" sy="15.0" tx="26.84049479166663" ty="-15.0">
+            <y:Point x="585.8188058035714" y="189.6015625"/>
+            <y:Point x="850.4583333333334" y="189.6015625"/>
           </y:Path>
           <y:LineStyle color="#000000" type="dashed" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
-          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Monospaced" fontSize="12" fontStyle="plain" height="17.96875" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="242.412109375" x="-178.66170867435517" xml:space="preserve" y="-148.0423278808593">.yield if waitingQueue.length = 0<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Monospaced" fontSize="12" fontStyle="plain" height="17.96875" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="119.59375" x="204.84267171223962" xml:space="preserve" y="44.08203124999997">.return | .throw<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e8" source="n1" target="n1">
-      <data key="d9" xml:space="preserve"><![CDATA[controller-method]]></data>
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="-46.7353515625" sy="0.0" tx="-23.36767578125" ty="-15.0">
-            <y:Point x="348.5660171750992" y="140.93750000000009"/>
-            <y:Point x="348.5660171750992" y="91.45312500000009"/>
-            <y:Point x="416.4136734250992" y="91.45312500000009"/>
-          </y:Path>
-          <y:LineStyle color="#000000" type="dashed" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Monospaced" fontSize="12" fontStyle="plain" height="17.96875" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="47.34765625" x="-34.436546301463295" xml:space="preserve" y="-58.468749999999915">.yield<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e9" source="n1" target="n6">
-      <data key="d9" xml:space="preserve"><![CDATA[controller-method]]></data>
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="35.801513671875" sy="15.0" tx="26.84049479166663" ty="-15.0">
-            <y:Point x="475.5828628782242" y="186.43750000000009"/>
-            <y:Point x="758.5329365079365" y="186.43750000000009"/>
-          </y:Path>
-          <y:LineStyle color="#000000" type="dashed" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Monospaced" fontSize="12" fontStyle="plain" height="17.96875" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="119.59375" x="223.1532062833271" xml:space="preserve" y="61.015625000000085">.return | .throw<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e10" source="n1" target="n4">
+    <edge id="e8" source="n1" target="n4">
       <data key="d9" xml:space="preserve"><![CDATA[stream-method]]></data>
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="12.433837890625" sy="15.0" tx="33.33320312500001" ty="-15.0">
-            <y:Point x="452.2151870969742" y="203.93750000000009"/>
-            <y:Point x="463.23650793650796" y="203.93750000000009"/>
-            <y:Point x="463.23650793650796" y="547.9765625000001"/>
-            <y:Point x="442.7544332837302" y="547.9765625000001"/>
+          <y:Path sx="1.5" sy="15.0" tx="36.22304687499997" ty="-15.0">
+            <y:Point x="555.1619047619048" y="633.7265625"/>
+            <y:Point x="536.1248325892857" y="633.7265625"/>
           </y:Path>
           <y:LineStyle color="#000000" type="line" width="4.0"/>
           <y:Arrows source="none" target="standard"/>
-          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" height="18.1328125" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="43.685546875" x="-10.821444944351413" xml:space="preserve" y="283.0039062500001">.return<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" height="18.1328125" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="43.685546875" x="-21.842794945126457" xml:space="preserve" y="250.15234375">.return<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e11" source="n6" target="n6">
+    <edge id="e9" source="n6" target="n6">
       <data key="d9" xml:space="preserve"><![CDATA[controller-method]]></data>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="-39.5107421875" sy="-8.25" tx="-26.840494791666664" ty="-15.0">
-            <y:Point x="499.73673115079373" y="371.7734375000001"/>
-            <y:Point x="499.73673115079373" y="330.5390625000001"/>
-            <y:Point x="704.8519655257937" y="330.5390625000001"/>
+            <y:Point x="591.6621279761905" y="357.0859375"/>
+            <y:Point x="591.6621279761905" y="315.8515625"/>
+            <y:Point x="796.7773623511905" y="315.8515625"/>
           </y:Path>
           <y:LineStyle color="#000000" type="dashed" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
-          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Monospaced" fontSize="12" fontStyle="plain" height="17.96875" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="184.615234375" x="-182.39797343905002" xml:space="preserve" y="-50.21874999999983">.yield | .return | .throw<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Monospaced" fontSize="12" fontStyle="plain" height="17.96875" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="184.615234375" x="-182.39799165271575" xml:space="preserve" y="-50.21874999999994">.yield | .return | .throw<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e12" source="n4" target="n4">
+    <edge id="e10" source="n4" target="n4">
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="-90.0830078125" sy="0.0" tx="-72.66640625" ty="-15.0">
-            <y:Point x="240.00873015873017" y="636.4453125000001"/>
-            <y:Point x="240.00873015873017" y="586.9609375000001"/>
-            <y:Point x="336.75482390873015" y="586.9609375000001"/>
+          <y:Path sx="-97.30761718750003" sy="0.0" tx="-78.44609375000002" ty="-15.0">
+            <y:Point x="324.70959821428573" y="720.1796875000001"/>
+            <y:Point x="324.70959821428573" y="670.6953125000001"/>
+            <y:Point x="421.45569196428573" y="670.6953125000001"/>
           </y:Path>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
-          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Monospaced" fontSize="12" fontStyle="plain" height="17.96875" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="76.24609375" x="-69.2907693529886" xml:space="preserve" y="-58.468749999999886">any action<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Monospaced" fontSize="12" fontStyle="plain" height="17.96875" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="76.24609375" x="-67.84655412946432" xml:space="preserve" y="-58.468749999999886">any action<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>
@@ -437,7 +403,7 @@
           <y:Path sx="0.0" sy="15.0" tx="0.0" ty="-15.0"/>
           <y:LineStyle color="#000000" type="dashed" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
-          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Monospaced" fontSize="12" fontStyle="plain" height="17.96875" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="177.390625" x="-88.69532025049602" xml:space="preserve" y="25.00000000000003">stream controller method<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Monospaced" fontSize="12" fontStyle="plain" height="17.96875" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="177.390625" x="-88.6953154548766" xml:space="preserve" y="25.00000000000003">stream controller method<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>
@@ -449,7 +415,7 @@
           <y:Path sx="0.0" sy="15.0" tx="0.0" ty="-15.0"/>
           <y:LineStyle color="#000000" type="line" width="4.0"/>
           <y:Arrows source="none" target="standard"/>
-          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Monospaced" fontSize="12" fontStyle="plain" height="17.96875" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="148.4921875" x="-74.24608425564236" xml:space="preserve" y="62.96875000000007">stream object method<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Monospaced" fontSize="12" fontStyle="plain" height="17.96875" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="148.4921875" x="-74.246094718812" xml:space="preserve" y="62.96875000000007">stream object method<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>
@@ -461,80 +427,127 @@
           <y:Path sx="0.0" sy="15.0" tx="0.0" ty="-15.0"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
-          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Monospaced" fontSize="12" fontStyle="plain" height="17.96875" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="40.123046875" x="-20.061545332651235" xml:space="preserve" y="25.00000000000003">other<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Monospaced" fontSize="12" fontStyle="plain" height="17.96875" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="40.123046875" x="-20.06152527824281" xml:space="preserve" y="25.00000000000003">other<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e13" source="n6" target="n6">
+    <edge id="e11" source="n6" target="n6">
       <data key="d9" xml:space="preserve"><![CDATA[stream-method]]></data>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="-39.5107421875" sy="6.75" tx="0.0" ty="-15.0">
-            <y:Point x="482.23673115079373" y="386.7734375000001"/>
-            <y:Point x="482.23673115079373" y="274.9882812500001"/>
-            <y:Point x="731.6924603174604" y="274.9882812500001"/>
+            <y:Point x="574.1621279761905" y="372.0859375"/>
+            <y:Point x="574.1621279761905" y="260.30078125"/>
+            <y:Point x="823.6178571428571" y="260.30078125"/>
           </y:Path>
           <y:LineStyle color="#000000" type="line" width="4.0"/>
           <y:Arrows source="none" target="standard"/>
-          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" height="18.1328125" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="150.607421875" x="-199.91933574373752" xml:space="preserve" y="-120.85156249999989">.next if queue.length &gt; 0<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" height="18.1328125" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="154.615234375" x="-201.92326020740325" xml:space="preserve" y="-120.8515625">.next[if queue.length &gt; 0]<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e14" source="n7" target="n7">
+    <edge id="e12" source="n7" target="n7">
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="-35.8984375" sy="0.0" tx="-17.94921875" ty="-15.0">
-            <y:Point x="276.7767113095238" y="768.0468750000001"/>
-            <y:Point x="276.7767113095238" y="718.5625000000001"/>
-            <y:Point x="373.5228050595238" y="718.5625000000001"/>
+            <y:Point x="367.2572668650794" y="851.7812500000001"/>
+            <y:Point x="367.2572668650794" y="802.2968750000001"/>
+            <y:Point x="464.0033606150794" y="802.2968750000001"/>
           </y:Path>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
-          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Monospaced" fontSize="12" fontStyle="plain" height="17.96875" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="76.24609375" x="-68.75841442289806" xml:space="preserve" y="-58.468749999999886">any action<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Monospaced" fontSize="12" fontStyle="plain" height="17.96875" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="76.24609375" x="-68.75838865249875" xml:space="preserve" y="-58.468749999999886">any action<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e15" source="n4" target="n7">
+    <edge id="e13" source="n4" target="n7">
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="15.0" tx="17.94921875" ty="-15.0"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
-          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" height="18.1328125" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="99.771484375" x="-49.88574615962921" xml:space="preserve" y="25.000000000000114">cleanup finished<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" height="18.1328125" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="99.771484375" x="-49.88575090680803" xml:space="preserve" y="25.000000000000114">cleanup finished<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e16" source="n6" target="n4">
+    <edge id="e14" source="n6" target="n4">
       <data key="d9" xml:space="preserve"><![CDATA[stream-method]]></data>
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="15.0" tx="71.16640625000002" ty="-15.0">
-            <y:Point x="731.6924603174604" y="547.9765625000001"/>
-            <y:Point x="480.5876364087302" y="547.9765625000001"/>
+          <y:Path sx="0.0" sy="15.0" tx="76.94609375" ty="-15.0">
+            <y:Point x="823.6178571428571" y="633.7265625"/>
+            <y:Point x="576.8478794642857" y="633.7265625"/>
           </y:Path>
           <y:LineStyle color="#000000" type="line" width="4.0"/>
           <y:Arrows source="none" target="standard"/>
-          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" height="18.1328125" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="202.369140625" x="-101.18455384269589" xml:space="preserve" y="87.90234375000011">.return | .next if queue.length = 0<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" height="18.1328125" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="206.376953125" x="-103.18847830636162" xml:space="preserve" y="188.33984375">.return | .next[if queue.length = 0]<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e17" source="n2" target="n2">
+    <edge id="e15" source="n2" target="n2">
       <data key="d9" xml:space="preserve"><![CDATA[stream-method]]></data>
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="-61.1845703125" sy="6.75" tx="-16.046142578125" ty="-15.0">
-            <y:Point x="7.000256541418651" y="386.7734375000001"/>
-            <y:Point x="7.000256541418651" y="274.9882812500001"/>
-            <y:Point x="318.00465107266865" y="274.9882812500001"/>
+          <y:Path sx="-61.1845703125" sy="6.75" tx="-1.5" ty="-15.0">
+            <y:Point x="98.36643105158726" y="372.0859375"/>
+            <y:Point x="98.36643105158726" y="260.30078125"/>
+            <y:Point x="419.06825396825394" y="260.30078125"/>
           </y:Path>
           <y:LineStyle color="#000000" type="line" width="4.0"/>
           <y:Arrows source="none" target="standard"/>
-          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" height="18.1328125" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="33.77734375" x="-255.83351421053442" xml:space="preserve" y="-120.8515625">.next<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" height="18.1328125" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="33.77734375" x="-250.98537558903774" xml:space="preserve" y="-120.85156249999994">.next<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="e16" source="n1" target="n1">
+      <data key="d9" xml:space="preserve"><![CDATA[stream-method]]></data>
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:Path sx="-46.7353515625" sy="6.75" tx="0.0" ty="-15.0">
+            <y:Point x="381.0544828869048" y="165.8515625"/>
+            <y:Point x="381.0544828869048" y="54.06640625"/>
+            <y:Point x="553.6619047619048" y="54.06640625"/>
+          </y:Path>
+          <y:LineStyle color="#000000" type="line" width="4.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" height="18.1328125" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="154.615234375" x="-117.84523635137634" xml:space="preserve" y="-120.85156250000001">.next[if queue.length &gt; 0]<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="e17" source="n3" target="n4">
+      <data key="d9" xml:space="preserve"><![CDATA[controller-method]]></data>
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="15.0" tx="-40.72304687499997" ty="-15.0">
+            <y:Point x="268.4123015873016" y="646.2109375000001"/>
+            <y:Point x="459.17873883928576" y="646.2109375000001"/>
+          </y:Path>
+          <y:LineStyle color="#000000" type="dashed" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Monospaced" fontSize="12" fontStyle="plain" height="17.96875" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="386.904296875" x="-193.45213933066714" xml:space="preserve" y="25.000000000000114">.return | .throw | .yield[if waitingQueue.length = 0]<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="e18" source="n3" target="n3">
+      <data key="d9" xml:space="preserve"><![CDATA[controller-method]]></data>
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:Path sx="-53.9599609375" sy="8.25" tx="0.0" ty="-15.0">
+            <y:Point x="5.500192212301613" y="580.9921875"/>
+            <y:Point x="5.500192212301613" y="466.2890625"/>
+            <y:Point x="268.4123015873016" y="466.2890625"/>
+          </y:Path>
+          <y:LineStyle color="#000000" type="dashed" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:EdgeLabel alignment="center" backgroundColor="#FFFFFF" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Monospaced" fontSize="12" fontStyle="plain" height="17.96875" horizontalTextPosition="center" iconTextGap="4" lineColor="#C0C0C0" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="249.63671875" x="-202.53894658164373" xml:space="preserve" y="-123.6875">.yield[if waitingQueue.length &gt; 0]<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>
