@@ -126,7 +126,19 @@ The following table explains precisely what each method does when in each possib
     <tr>
         <td><code>stream.next</code></td>
         <td>
-            If the queue has items in it, it will resolve with the first item in the queue.
-            <p>Else if the queue is empty we'll add this <code>
+            <p>
+                If the *itemQueue* has items in it resolve with the first item.
+            <p>
+                Else we'll add this <code>.next</code> onto the <i>waitingQueue</i> and enter the **waitingForValue** state.
+        <td>
+            <p>
+                If the <i>itemQueue</i> has items in it resolve with the first item.
+            <p>
+                Else if the <i>completion value</i> is an error then reject with that error.
+            <p>
+                Else resolve with the <i>completion value</i>.
+        <td>
+            <p>
+                Add this call <code>.next</code> onto the waiting queue.
 
 </table>
