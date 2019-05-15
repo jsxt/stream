@@ -127,9 +127,9 @@ The following table explains precisely what each method does when in each possib
         <td><code>stream.next</code></td>
         <td>
             <p>
-                If the *itemQueue* has items in it resolve with the first item.
+                If the <i>itemQueue</i> has items in it resolve with the first item.
             <p>
-                Else we'll add this <code>.next</code> onto the <i>waitingQueue</i> and enter the **waitingForValue** state.
+                Else we'll add this <code>.next</code> onto the <i>waitingQueue</i> and enter the <b>waitingForValue</b> state.
         <td>
             <p>
                 If the <i>itemQueue</i> has items in it resolve with the first item.
@@ -140,5 +140,8 @@ The following table explains precisely what each method does when in each possib
         <td>
             <p>
                 Add this call <code>.next</code> onto the waiting queue.
+        <td>
+            <p>
+                When the stream is complete <i><b>resolve</b></i>
 
 </table>
