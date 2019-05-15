@@ -127,7 +127,7 @@ type StreamOptions<T> = {
 }
 
 export default class Stream<T> {
-    _state: Readonly<StreamState<T>>
+    private _state: Readonly<StreamState<T>>
 
     constructor(initializer: StreamInitializer<T>, options: StreamOptions<T>={}) {
         const { queue=new Queue<T>() } = options

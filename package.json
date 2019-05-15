@@ -6,7 +6,7 @@
     "main": "Stream.js",
     "scripts": {
         "test": "ava",
-        "build": "tsc --target esnext Stream.ts && mv Stream.js Stream.mjs"
+        "build": "tsc --declaration --target esnext Stream.ts && mv Stream.js Stream.mjs"
     },
     "author": "James \"The Jamesernator\" Browning",
     "license": "MIT",
