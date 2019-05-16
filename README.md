@@ -111,37 +111,3 @@ Here's the full state diagram. It's just a teensy tiny bit more complicated than
 ![a diagram showing all the states of the stream](./stream.svg)
 
 Okay so it's a bit more complicated than the Promise one but it guarantees that all `.next`/`.return` calls will be appropriately fulfilled if they have been requested.
-
-The following table explains precisely what each method does when in each possible state:
-
-<table>
-    <thead>
-        <td>
-        <td><b>maybeQueued</b></td>
-        <td><b>endQueued</b></td>
-        <td><b>waitingForValue</b></td>
-        <td><b>waitingForEnd</b></td>
-        <td><b>waitingForCleanupToFinish</b></td>
-        <td><b>complete</b></td>
-    <tr>
-        <td><code>stream.next</code></td>
-        <td>
-            <p>
-                If the <i>itemQueue</i> has items in it resolve with the first item.
-            <p>
-                Else we'll add this <code>.next</code> onto the <i>waitingQueue</i> and enter the <b>waitingForValue</b> state.
-        <td>
-            <p>
-                If the <i>itemQueue</i> has items in it resolve with the first item.
-            <p>
-                Else if the <i>completion value</i> is an error then reject with that error.
-            <p>
-                Else resolve with the <i>completion value</i>.
-        <td>
-            <p>
-                Add this call <code>.next</code> onto the waiting queue.
-        <td>
-            <p>
-                When the stream is complete <i><b>resolve</b></i>
-
-</table>
