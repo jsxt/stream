@@ -12,7 +12,7 @@ declare class Deferred<T> {
 }
 interface AbstractQueue<T> {
     isEmpty: boolean;
-    enqueue: (value: T) => void;
+    enqueue: (value: T) => any;
     dequeue: () => T;
 }
 export declare class Queue<T> implements AbstractQueue<T> {

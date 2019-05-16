@@ -1,12 +1,11 @@
 {
     "name": "@jx/stream",
-    "type": "module",
     "version": "1.0.0",
     "description": "Stream is a single type like Promise representing a sequence of values instead of just one",
     "main": "Stream.js",
     "scripts": {
         "test": "ava",
-        "build": "tsc --declaration --target esnext Stream.ts && mv Stream.js Stream.mjs"
+        "build": "tsc --declaration --target esnext Stream.ts && mv Stream.js Stream.mjs && cp Stream.cjs Stream.js"
     },
     "author": "James \"The Jamesernator\" Browning",
     "license": "MIT",
