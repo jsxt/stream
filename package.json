@@ -14,7 +14,7 @@
         "typescript": "^3.4.5"
     },
     "devDependencies": {
-        "ava": "^1.4.1",
+        "ava": "^2.0.0",
         "babel-eslint": "^10.0.1",
         "eslint": "^5.16.0"
     },
