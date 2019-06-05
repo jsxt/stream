@@ -10,13 +10,13 @@
     "author": "James \"The Jamesernator\" Browning",
     "license": "MIT",
     "dependencies": {
-        "esm": "^3.2.22",
-        "typescript": "^3.4.5"
+        "esm": "^3.2.25"
     },
     "devDependencies": {
         "ava": "^2.0.0",
         "babel-eslint": "^10.0.1",
-        "eslint": "^5.16.0"
+        "eslint": "^5.16.0",
+        "typescript": "^3.5.1"
     },
     "ava": {
         "babel": false,
