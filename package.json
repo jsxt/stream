@@ -13,10 +13,10 @@
         "esm": "^3.2.25"
     },
     "devDependencies": {
-        "ava": "^2.0.0",
-        "babel-eslint": "^10.0.1",
+        "ava": "^2.1.0",
+        "babel-eslint": "^10.0.2",
         "eslint": "^5.16.0",
-        "typescript": "^3.5.1"
+        "typescript": "^3.5.2"
     },
     "ava": {
         "babel": false,
