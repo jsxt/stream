@@ -26,10 +26,10 @@ declare type StreamController<T> = {
     [Symbol.toStringTag]: string;
     yield: (value: T) => void;
     next: (value: T) => void;
-    throw: (error: any) => void;
-    error: (error: any) => void;
-    return: (endValue: any) => void;
-    complete: (endValue: any) => void;
+    throw: (error?: any) => void;
+    error: (error?: any) => void;
+    return: (endValue?: any) => void;
+    complete: (endValue?: any) => void;
 };
 declare type StreamInitializer<T> = (controller: StreamController<T>) => CleanupCallback | void;
 declare type StreamOptions<T> = {

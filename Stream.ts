@@ -108,10 +108,10 @@ type StreamController<T> = {
     [Symbol.toStringTag]: string,
     yield: (value: T) => void,
     next: (value: T) => void,
-    throw: (error: any) => void,
-    error: (error: any) => void,
-    return: (endValue: any) => void,
-    complete: (endValue: any) => void,
+    throw: (error?: any) => void,
+    error: (error?: any) => void,
+    return: (endValue?: any) => void,
+    complete: (endValue?: any) => void,
 }
 
 class UnreachableError extends Error {
