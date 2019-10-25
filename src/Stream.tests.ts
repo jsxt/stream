@@ -6,16 +6,6 @@ function queueMicrotask(func: () => any) {
     Promise.resolve().then(func);
 }
 
-async function isResolved(promise: Promise<any>) {
-    const resolved = Symbol();
-    try {
-        const result = await Promise.race([resolved, promise]);
-        return result !== resolved;
-    } catch {
-        return false;
-    }
-}
-
 export const tests = {
     "can construct a stream"() {
         const stream = new Stream((_stream) => {
