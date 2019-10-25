@@ -1,5 +1,5 @@
 /// <reference lib="esnext" />
-class AggregateError extends Error {
+export class AggregateError extends Error {
     constructor(errors, message) {
         super(message);
         this.errors = errors;
@@ -86,16 +86,10 @@ export default class Stream {
             }
             const cleanedUp = this._doCleanup(cleanupOperation, state.completionValue, cleanupComplete);
             this._state = Object.freeze({
-                name: "waitingForCleanupToFinish",
+                name: "endQueued",
+                itemQueue: state.itemQueue,
                 cleanedUp,
                 completionValue: state.completionValue,
-            });
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
-            cleanedUp.then((completionValue) => {
-                this._state = Object.freeze({
-                    name: "complete",
-                    completionValue,
-                });
             });
         }
         else {
@@ -423,7 +417,7 @@ export default class Stream {
             if (completionValue.type === "return") {
                 return Promise.resolve({ done: true, value: completionValue.value });
             }
-            throw completionValue.reason;
+            return Promise.reject(completionValue.reason);
         }
         throw new UnreachableError(state);
     }

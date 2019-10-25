@@ -1,6 +1,6 @@
 /// <reference lib="esnext" />
 
-class AggregateError extends Error {
+export class AggregateError extends Error {
     errors: Array<any>;
 
     constructor(errors: Array<any>, message?: string) {
@@ -118,14 +118,14 @@ type StreamState<T, R>
     | WaitingForCleanupToFinish<R>
     | CompleteState<R>;
 
-type StreamController<T> = {
+export type StreamController<T, R> = {
     [Symbol.toStringTag]: string,
     yield: (value: T) => void,
     next: (value: T) => void,
     throw: (error?: any) => void,
     error: (error?: any) => void,
-    return: (endValue?: any) => void,
-    complete: (endValue?: any) => void,
+    return: (endValue: R) => void,
+    complete: (endValue: R) => void,
 };
 
 class UnreachableError extends Error {
@@ -134,7 +134,7 @@ class UnreachableError extends Error {
     }
 }
 
-type StreamInitializer<T> = (controller: StreamController<T>) => CleanupCallback | void;
+type StreamInitializer<T, R> = (controller: StreamController<T, R>) => CleanupCallback | void;
 
 type StreamOptions<T> = {
     queue?: AbstractQueue<T>,
@@ -144,7 +144,7 @@ export default class Stream<T, R=undefined>
 implements AsyncIterator<T, R>, AsyncIterable<T> {
     private _state: Readonly<StreamState<T, R>>;
 
-    constructor(initializer: StreamInitializer<T>, options: StreamOptions<T>={}) {
+    constructor(initializer: StreamInitializer<T, R>, options: StreamOptions<T>={}) {
         const { queue=new Queue<T>() } = options;
 
         if (typeof initializer !== "function") {
@@ -191,16 +191,10 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
 
             const cleanedUp = this._doCleanup(cleanupOperation, state.completionValue, cleanupComplete!);
             this._state = Object.freeze({
-                name: "waitingForCleanupToFinish",
+                name: "endQueued",
+                itemQueue: state.itemQueue,
                 cleanedUp,
                 completionValue: state.completionValue,
-            });
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
-            cleanedUp.then((completionValue) => {
-                this._state = Object.freeze({
-                    name: "complete",
-                    completionValue,
-                });
             });
         } else {
             const state = this._state as EndQueuedState<T, R> | MaybeQueuedState<T, R>;
