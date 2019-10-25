@@ -130,4 +130,16 @@ export const tests = {
 
         assert.deepEqual({ done: true, value: "foobar" }, await nextItem2);
     },
+
+    async ".return closes the stream"() {
+        const stream = new Stream<number, string>((stream) => {
+            stream.yield(2);
+            queueMicrotask(() => stream.yield(3));
+        });
+
+        await stream.next();
+        await stream.next();
+
+        assert.deepEqual({ done: true, value: "foobar" }, await stream.return("foobar"));
+    },
 };

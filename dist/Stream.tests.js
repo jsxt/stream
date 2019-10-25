@@ -4,16 +4,6 @@ function queueMicrotask(func) {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     Promise.resolve().then(func);
 }
-async function isResolved(promise) {
-    const resolved = Symbol();
-    try {
-        const result = await Promise.race([resolved, promise]);
-        return result !== resolved;
-    }
-    catch {
-        return false;
-    }
-}
 export const tests = {
     "can construct a stream"() {
         const stream = new Stream((_stream) => {
@@ -110,6 +100,15 @@ export const tests = {
         await assert.notResolved(nextItem2);
         streamController.return("foobar");
         assert.deepEqual({ done: true, value: "foobar" }, await nextItem2);
+    },
+    async ".return closes the stream"() {
+        const stream = new Stream((stream) => {
+            stream.yield(2);
+            queueMicrotask(() => stream.yield(3));
+        });
+        await stream.next();
+        await stream.next();
+        await stream.return("foobar");
     },
 };
 //# sourceMappingURL=Stream.tests.js.map
