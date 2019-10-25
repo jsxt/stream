@@ -23,5 +23,13 @@
         "eslint": "^6.5.1",
         "eslint-plugin-import": "^2.18.2",
         "typescript": "^3.6.4"
-    }
+    },
+    "files": [
+        "dist/Stream.js",
+        "dist/Stream.map.js",
+        "src/Stream.ts",
+        "README.md",
+        "stream.svg",
+        "tsconfig.json"
+    ]
 }

@@ -1,6 +1,5 @@
 /// <reference lib="esnext" />
 
-
 class AggregateError extends Error {
     errors: Array<any>;
 
@@ -186,11 +185,23 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
 
         if (cleanupComplete!) {
             const state = this._state;
-            if (state.name === "maybeQueued" || state.name === "endQueued" || state.name === "waitingForValue") {
+            if (state.name !== "endQueued") {
                 throw new Error("Impossible state");
             }
+
+            const cleanedUp = this._doCleanup(cleanupOperation, state.completionValue, cleanupComplete!);
+            this._state = Object.freeze({
+                name: "waitingForCleanupToFinish",
+                cleanedUp,
+                completionValue: state.completionValue,
+            });
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
-            this._doCleanup(cleanupOperation, state.completionValue, cleanupComplete!);
+            cleanedUp.then((completionValue) => {
+                this._state = Object.freeze({
+                    name: "complete",
+                    completionValue,
+                });
+            });
         } else {
             const state = this._state as EndQueuedState<T, R> | MaybeQueuedState<T, R>;
             if (state.name === "endQueued") {
@@ -207,7 +218,7 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
         }
     }
 
-    _createYield() {
+    private _createYield() {
         const _yield = (value: T) => {
             const state = this._state;
             if (state.name === "maybeQueued") {
@@ -264,7 +275,7 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
         return _yield;
     }
 
-    _createReturn() {
+    private _createReturn() {
         const _return = (value: R) => {
             const completionValue = { type: "return" as const, value };
             const state = this._state;
@@ -317,7 +328,7 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
         return _return;
     }
 
-    _createThrow() {
+    private _createThrow() {
         const _throw = (reason: any) => {
             const completionValue = { type: "error" as const, reason };
             const state = this._state;
@@ -370,7 +381,7 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
         return _throw;
     }
 
-    async _doCleanup(
+    private async _doCleanup(
         cleanupOperation: CleanupCallback,
         completionValue: CompletionValue<R>,
         deferred: Deferred<CompletionValue<R>>=new Deferred(),

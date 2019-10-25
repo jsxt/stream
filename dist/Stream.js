@@ -81,11 +81,22 @@ export default class Stream {
             : doNothing;
         if (cleanupComplete) {
             const state = this._state;
-            if (state.name === "maybeQueued" || state.name === "endQueued" || state.name === "waitingForValue") {
+            if (state.name !== "endQueued") {
                 throw new Error("Impossible state");
             }
+            const cleanedUp = this._doCleanup(cleanupOperation, state.completionValue, cleanupComplete);
+            this._state = Object.freeze({
+                name: "waitingForCleanupToFinish",
+                cleanedUp,
+                completionValue: state.completionValue,
+            });
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
-            this._doCleanup(cleanupOperation, state.completionValue, cleanupComplete);
+            cleanedUp.then((completionValue) => {
+                this._state = Object.freeze({
+                    name: "complete",
+                    completionValue,
+                });
+            });
         }
         else {
             const state = this._state;
