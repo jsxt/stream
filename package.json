@@ -1,34 +1,27 @@
 {
     "name": "@jx/stream",
     "type": "module",
-    "version": "3.0.0",
-    "description": "Stream is a single type like Promise representing a sequence of values instead of just one",
-    "main": "Stream.js",
+    "version": "4.0.0",
+    "description": "Stream is a library for creating a pull stream from a push source",
+    "main": "dist/Stream.js",
+    "exports": {
+        ".": "./dist/Stream.js",
+        "./": "./dist/"
+    },
     "scripts": {
-        "test": "ava",
-        "build": "tsc --sourceMap --declaration --target esnext Stream.ts"
+        "test": "tsx && node ./dist/runTests/",
+        "build": "tsc",
+        "lint": "eslint src/*.ts",
+        "lint:fix": "eslint --fix src/*.ts"
     },
     "author": "James \"The Jamesernator\" Browning",
     "license": "MIT",
-    "dependencies": {
-        "esm": "^3.2.25"
-    },
     "devDependencies": {
-        "ava": "^2.1.0",
-        "babel-eslint": "^10.0.2",
-        "eslint": "^5.16.0",
-        "typescript": "^3.5.2"
-    },
-    "ava": {
-        "babel": false,
-        "extensions": [
-            "mjs"
-        ],
-        "files": [
-            "tests/*.mjs"
-        ],
-        "require": [
-            "esm"
-        ]
+        "@jsxt/eslint-config-typescript": "^3.0.5",
+        "@typescript-eslint/eslint-plugin": "^2.5.0",
+        "@typescript-eslint/parser": "^2.5.0",
+        "eslint": "^6.5.1",
+        "eslint-plugin-import": "^2.18.2",
+        "typescript": "^3.6.4"
     }
 }
