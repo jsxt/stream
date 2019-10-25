@@ -532,7 +532,7 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
             if (completionValue.type === "return") {
                 return Promise.resolve({ done: true, value: completionValue.value });
             }
-            throw completionValue.reason;
+            return Promise.reject(completionValue.reason);
         }
         throw new UnreachableError(state);
     }
