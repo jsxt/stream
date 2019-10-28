@@ -9,7 +9,7 @@
         "./": "./dist/"
     },
     "scripts": {
-        "test": "tsx && node ./dist/runTests/",
+        "test": "tsc && node --experimental-modules ./dist/runTests.js",
         "build": "tsc",
         "lint": "eslint src/*.ts",
         "lint:fix": "eslint --fix src/*.ts"

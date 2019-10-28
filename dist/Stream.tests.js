@@ -108,7 +108,7 @@ export const tests = {
         });
         await stream.next();
         await stream.next();
-        await stream.return("foobar");
+        assert.deepEqual({ done: true, value: "foobar" }, await stream.return("foobar"));
     },
 };
 //# sourceMappingURL=Stream.tests.js.map
