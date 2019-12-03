@@ -8,7 +8,7 @@
         "./": "./dist/"
     },
     "scripts": {
-        "prepublish": "npm run build",
+        "prepublish": "rm -rf ./dist/ && npm run build",
         "test": "tsc && node --experimental-modules ./dist/runTests.js",
         "build": "tsc",
         "lint": "eslint src/*.ts",
