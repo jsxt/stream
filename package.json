@@ -1,14 +1,14 @@
 {
-    "name": "@jx/stream",
+    "name": "@jsxt/stream",
     "type": "module",
     "version": "4.0.0",
-    "description": "Stream is a library for creating a pull stream from a push source",
-    "main": "dist/Stream.js",
+    "description": "Stream is a library for creating a async iterable pull stream from a push source",
     "exports": {
         ".": "./dist/Stream.js",
         "./": "./dist/"
     },
     "scripts": {
+        "prepublish": "npm run build",
         "test": "tsx && node ./dist/runTests/",
         "build": "tsc",
         "lint": "eslint src/*.ts",
@@ -29,7 +29,7 @@
     },
     "files": [
         "dist/Stream.js",
-        "dist/Stream.map.js",
+        "dist/Stream.js.map",
         "src/Stream.ts",
         "README.md",
         "stream.svg",
