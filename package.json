@@ -50,6 +50,7 @@
         "src/*",
         "README.md",
         "stream.svg",
+        "tsconfig.base.json",
         "tsconfig.json"
     ]
 }
