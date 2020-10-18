@@ -1,34 +1,32 @@
 /// <reference lib="esnext" />
 
-export class AggregateError extends Error {
-    errors: Array<any>;
-
-    constructor(errors: Array<any>, message?: string) {
-        super(message);
-        this.errors = errors;
-    }
-}
+type Resolver<T> = {
+    resolve: (value: T | Promise<T>) => void,
+    reject: (error: any) => void,
+};
 
 class Deferred<T> {
-    private _resolve!: (value: T) => void;
-
-    private _reject!: (error: any) => void;
-
-    private readonly _promise: Promise<T>;
+    readonly #resolve: (value: T | Promise<T>) => void;
+    readonly #reject: (error: any) => void;
+    readonly #promise: Promise<T>;
 
     constructor() {
-        this._promise = new Promise((resolve, reject) => {
-            this._resolve = resolve;
-            this._reject = reject;
+        let resolve!: Resolver<T>["resolve"];
+        let reject!: Resolver<T>["reject"];
+        this.#promise = new Promise((pResolve, pReject) => {
+            resolve = pResolve;
+            reject = pReject;
         });
+        this.#resolve = resolve;
+        this.#reject = reject;
     }
 
-    get promise() {
-        return this._promise;
+    get promise(): Promise<T> {
+        return this.#promise;
     }
 
-    get resolver() {
-        return { resolve: this._resolve, reject: this._reject };
+    get resolver(): Resolver<T> {
+        return { resolve: this.#resolve, reject: this.#reject };
     }
 }
 
@@ -43,23 +41,23 @@ interface AbstractQueue<T> {
 }
 
 export class Queue<T> implements AbstractQueue<T> {
-    private readonly _queue: Set<{ value: T} > = new Set();
+    readonly #queue: Set<{ value: T} > = new Set();
 
-    get isEmpty() {
-        return this._queue.size === 0;
+    get isEmpty(): boolean {
+        return this.#queue.size === 0;
     }
 
-    enqueue(value: T) {
+    enqueue(value: T): void {
         const wrapper = { value };
-        this._queue.add(wrapper);
+        this.#queue.add(wrapper);
     }
 
-    dequeue() {
-        if (this._queue.size === 0) {
+    dequeue(): T {
+        if (this.#queue.size === 0) {
             throw new Error(`Can't dequeue from empty queue`);
         }
-        const [wrapper] = this._queue;
-        this._queue.delete(wrapper);
+        const [wrapper] = this.#queue;
+        this.#queue.delete(wrapper);
         return wrapper.value;
     }
 }
@@ -118,7 +116,7 @@ type StreamState<T, R>
     | WaitingForCleanupToFinish<R>
     | CompleteState<R>;
 
-export type StreamController<T, R> = {
+export type StreamController<T, R=void> = {
     [Symbol.toStringTag]: string,
     yield: (value: T) => void,
     next: (value: T) => void,
@@ -134,15 +132,23 @@ class UnreachableError extends Error {
     }
 }
 
-type StreamInitializer<T, R> = (controller: StreamController<T, R>) => CleanupCallback | void;
+type StreamInitializer<T, R>
+    = ((controller: StreamController<T, R>) => void)
+    | ((controller: StreamController<T, R>) => CleanupCallback);
 
 type StreamOptions<T> = {
     queue?: AbstractQueue<T>,
 };
 
-export default class Stream<T, R=undefined>
+function assert(condition: boolean): asserts condition {
+    if (!condition) {
+        throw new Error("assertion failed");
+    }
+}
+
+export default class Stream<T, R=void>
 implements AsyncIterator<T, R>, AsyncIterable<T> {
-    private _state: Readonly<StreamState<T, R>>;
+    #state: Readonly<StreamState<T, R>>;
 
     constructor(initializer: StreamInitializer<T, R>, options: StreamOptions<T>={}) {
         const { queue=new Queue<T>() } = options;
@@ -151,15 +157,15 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
             throw new TypeError("Initializer must be a function");
         }
 
-        const _yield = this._createYield();
-        const _throw = this._createThrow();
-        const _return = this._createReturn();
+        const yieldValue = this.#yieldValue;
+        const throwValue = this.#throwValue;
+        const returnValue = this.#returnValue;
 
         let cleanupComplete: Deferred<CompletionValue<R>>;
 
         const waitingQueue: WaitingQueue<T, R> = new Queue();
 
-        this._state = Object.freeze({
+        this.#state = Object.freeze({
             name: "maybeQueued",
             itemQueue: queue,
             waitingQueue,
@@ -171,12 +177,12 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
 
         const realCleanup = initializer({
             [Symbol.toStringTag]: "StreamController",
-            yield: _yield,
-            throw: _throw,
-            return: _return,
-            next: _yield,
-            error: _throw,
-            complete: _return,
+            yield: yieldValue,
+            throw: throwValue,
+            return: returnValue,
+            next: yieldValue,
+            error: throwValue,
+            complete: returnValue,
         });
 
         const cleanupOperation = typeof realCleanup === "function"
@@ -184,206 +190,196 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
             : doNothing;
 
         if (cleanupComplete!) {
-            const state = this._state;
+            const state = this.#state;
             if (state.name !== "endQueued") {
                 throw new Error("Impossible state");
             }
 
-            const cleanedUp = this._doCleanup(cleanupOperation, state.completionValue, cleanupComplete!);
-            this._state = Object.freeze({
+            const cleanedUp = this.#doCleanup(cleanupOperation, state.completionValue, cleanupComplete!);
+            this.#state = Object.freeze({
                 name: "endQueued",
                 itemQueue: state.itemQueue,
                 cleanedUp,
                 completionValue: state.completionValue,
             });
         } else {
-            const state = this._state as EndQueuedState<T, R> | MaybeQueuedState<T, R>;
+            assert(
+                this.#state.name === "endQueued"
+                || this.#state.name === "maybeQueued",
+            );
+            const state = this.#state;
             if (state.name === "endQueued") {
-                this._state = Object.freeze({
+                this.#state = Object.freeze({
                     ...state,
                     cleanupOperation,
                 });
                 return;
             }
-            this._state = Object.freeze({
+            this.#state = Object.freeze({
                 ...state,
                 cleanupOperation,
             });
         }
     }
 
-    private _createYield() {
-        const _yield = (value: T) => {
-            const state = this._state;
-            if (state.name === "maybeQueued") {
-                state.itemQueue.enqueue(value);
-            } else if (state.name === "waitingForValue") {
-                const { waitingQueue } = state;
-                const resolver = waitingQueue.dequeue();
-                if (waitingQueue.isEmpty) {
-                    this._state = Object.freeze({
-                        name: "maybeQueued",
-                        waitingQueue: state.waitingQueue,
-                        itemQueue: state.itemQueue,
-                        cleanupOperation: state.cleanupOperation,
-                    });
-                }
-                resolver.resolve({
-                    done: false,
-                    value,
+    #yieldValue = (value: T): void => {
+        const state = this.#state;
+        if (state.name === "maybeQueued") {
+            state.itemQueue.enqueue(value);
+        } else if (state.name === "waitingForValue") {
+            const { waitingQueue } = state;
+            const resolver = waitingQueue.dequeue();
+            if (waitingQueue.isEmpty) {
+                this.#state = Object.freeze({
+                    name: "maybeQueued",
+                    waitingQueue: state.waitingQueue,
+                    itemQueue: state.itemQueue,
+                    cleanupOperation: state.cleanupOperation,
                 });
-            } else if (state.name === "waitingForEnd") {
-                const { waitingQueue } = state;
-                const resolver = waitingQueue.dequeue();
-                resolver.resolve({
-                    done: false,
-                    value,
+            }
+            resolver.resolve({
+                done: false,
+                value,
+            });
+        } else if (state.name === "waitingForEnd") {
+            const { waitingQueue } = state;
+            const resolver = waitingQueue.dequeue();
+            resolver.resolve({
+                done: false,
+                value,
+            });
+
+            if (waitingQueue.isEmpty) {
+                const { endWaiter, completionValue } = state;
+                const cleanedUp = this.#doCleanup(state.cleanupOperation, completionValue);
+
+                this.#state = Object.freeze({
+                    name: "waitingForCleanupToFinish",
+                    cleanedUp,
+                    completionValue,
                 });
 
-                if (waitingQueue.isEmpty) {
-                    const { endWaiter, completionValue } = state;
-                    const cleanedUp = this._doCleanup(state.cleanupOperation, completionValue);
-
-                    this._state = Object.freeze({
-                        name: "waitingForCleanupToFinish",
-                        cleanedUp,
-                        completionValue,
-                    });
-
-                    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                    cleanedUp.then((completionValue) => {
-                        this._state = Object.freeze({ name: "complete", completionValue });
-                        if (completionValue.type === "return") {
-                            endWaiter.resolver.resolve({ done: true, value: completionValue.value });
-                        } else {
-                            endWaiter.resolver.reject(completionValue.reason);
-                        }
-                    });
-                }
-            } else if (state.name === "complete"
+                void cleanedUp.then((completionValue) => {
+                    this.#state = Object.freeze({ name: "complete", completionValue });
+                    if (completionValue.type === "return") {
+                        endWaiter.resolver.resolve({ done: true, value: completionValue.value });
+                    } else {
+                        endWaiter.resolver.reject(completionValue.reason);
+                    }
+                });
+            }
+        } else if (state.name === "complete"
             || state.name === "endQueued"
             || state.name === "waitingForCleanupToFinish") {
-                // Maybe warn in these states
-            }
-        };
-        return _yield;
-    }
+            // Maybe warn in these states
+        }
+    };
 
-    private _createReturn() {
-        const _return = (value: R) => {
-            const completionValue = { type: "return" as const, value };
-            const state = this._state;
-            if (state.name === "maybeQueued") {
-                this._state = Object.freeze({
-                    name: "endQueued",
-                    itemQueue: state.itemQueue,
-                    completionValue,
-                    cleanedUp: this._doCleanup(state.cleanupOperation, completionValue),
-                });
-            } else if (state.name === "waitingForValue"
+    #returnValue = (value: R): void => {
+        const completionValue = { type: "return" as const, value };
+        const state = this.#state;
+        if (state.name === "maybeQueued") {
+            this.#state = Object.freeze({
+                name: "endQueued",
+                itemQueue: state.itemQueue,
+                completionValue,
+                cleanedUp: this.#doCleanup(state.cleanupOperation, completionValue),
+            });
+        } else if (state.name === "waitingForValue"
             || state.name === "waitingForEnd") {
-                const { waitingQueue, cleanupOperation } = state;
-                const cleanedUp = this._doCleanup(cleanupOperation, completionValue);
+            const { waitingQueue, cleanupOperation } = state;
+            const cleanedUp = this.#doCleanup(cleanupOperation, completionValue);
 
-                while (!waitingQueue.isEmpty) {
-                    const resolver = waitingQueue.dequeue();
+            while (!waitingQueue.isEmpty) {
+                const resolver = waitingQueue.dequeue();
 
-                    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                    cleanedUp.then((completionValue) => {
-                        if (completionValue.type === "return") {
-                            resolver.resolve({ done: true, value: completionValue.value });
-                        } else {
-                            resolver.reject(completionValue.reason);
-                        }
-                    });
-                }
-
-                if (state.name === "waitingForEnd") {
-                    const { endWaiter } = state;
-
-                    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                    cleanedUp.then((completionValue) => {
-                        if (completionValue.type === "return") {
-                            endWaiter.resolver.resolve({ done: true, value: completionValue.value });
-                        } else {
-                            endWaiter.resolver.reject(completionValue.reason);
-                        }
-                    });
-                }
-
-                this._state = Object.freeze({
-                    name: "waitingForCleanupToFinish",
-                    cleanedUp,
-                    completionValue,
+                void cleanedUp.then((completionValue) => {
+                    if (completionValue.type === "return") {
+                        resolver.resolve({ done: true, value: completionValue.value });
+                    } else {
+                        resolver.reject(completionValue.reason);
+                    }
                 });
             }
-        };
 
-        return _return;
-    }
+            if (state.name === "waitingForEnd") {
+                const { endWaiter } = state;
 
-    private _createThrow() {
-        const _throw = (reason: any) => {
-            const completionValue = { type: "error" as const, reason };
-            const state = this._state;
-            if (state.name === "maybeQueued") {
-                this._state = Object.freeze({
-                    name: "endQueued",
-                    itemQueue: state.itemQueue,
-                    completionValue,
-                    cleanedUp: this._doCleanup(state.cleanupOperation, completionValue),
+                void cleanedUp.then((completionValue) => {
+                    if (completionValue.type === "return") {
+                        endWaiter.resolver.resolve({ done: true, value: completionValue.value });
+                    } else {
+                        endWaiter.resolver.reject(completionValue.reason);
+                    }
                 });
-            } else if (state.name === "waitingForValue"
+            }
+
+            this.#state = Object.freeze({
+                name: "waitingForCleanupToFinish",
+                cleanedUp,
+                completionValue,
+            });
+        }
+    };
+
+    #throwValue = (reason: any | any): void => {
+        const completionValue = { type: "error" as const, reason };
+        const state = this.#state;
+        if (state.name === "maybeQueued") {
+            this.#state = Object.freeze({
+                name: "endQueued",
+                itemQueue: state.itemQueue,
+                completionValue,
+                cleanedUp: this.#doCleanup(state.cleanupOperation, completionValue),
+            });
+        } else if (state.name === "waitingForValue"
             || state.name === "waitingForEnd") {
-                const { waitingQueue, cleanupOperation } = state;
-                const cleanedUp = this._doCleanup(cleanupOperation, completionValue);
+            const { waitingQueue, cleanupOperation } = state;
+            const cleanedUp = this.#doCleanup(cleanupOperation, completionValue);
 
-                while (!waitingQueue.isEmpty) {
-                    const resolver = waitingQueue.dequeue();
+            while (!waitingQueue.isEmpty) {
+                const resolver = waitingQueue.dequeue();
 
-                    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                    cleanedUp.then((completionValue) => {
-                        if (completionValue.type === "return") {
-                            resolver.resolve({ done: true, value: completionValue.value });
-                        } else {
-                            resolver.reject(completionValue.reason);
-                        }
-                    });
-                }
-
-                if (state.name === "waitingForEnd") {
-                    const { endWaiter } = state;
-
-                    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                    cleanedUp.then((completionValue) => {
-                        if (completionValue.type === "return") {
-                            endWaiter.resolver.resolve({ done: true, value: completionValue.value });
-                        } else {
-                            endWaiter.resolver.reject(completionValue.reason);
-                        }
-                    });
-                }
-
-                this._state = Object.freeze({
-                    name: "waitingForCleanupToFinish",
-                    cleanedUp,
-                    completionValue,
+                // eslint-disable-next-line @typescript-eslint/no-floating-promises
+                cleanedUp.then((completionValue) => {
+                    if (completionValue.type === "return") {
+                        resolver.resolve({ done: true, value: completionValue.value });
+                    } else {
+                        resolver.reject(completionValue.reason);
+                    }
                 });
             }
-        };
 
-        return _throw;
-    }
+            if (state.name === "waitingForEnd") {
+                const { endWaiter } = state;
 
-    private async _doCleanup(
+                // eslint-disable-next-line @typescript-eslint/no-floating-promises
+                cleanedUp.then((completionValue) => {
+                    if (completionValue.type === "return") {
+                        endWaiter.resolver.resolve({ done: true, value: completionValue.value });
+                    } else {
+                        endWaiter.resolver.reject(completionValue.reason);
+                    }
+                });
+            }
+
+            this.#state = Object.freeze({
+                name: "waitingForCleanupToFinish",
+                cleanedUp,
+                completionValue,
+            });
+        }
+    };
+
+    #doCleanup = async (
         cleanupOperation: CleanupCallback,
         completionValue: CompletionValue<R>,
         deferred: Deferred<CompletionValue<R>>=new Deferred(),
-    ) {
+    ): Promise<CompletionValue<R>> => {
         try {
             await cleanupOperation();
             deferred.resolver.resolve(completionValue);
-        } catch (cleanupError) {
+        } catch (cleanupError: any) {
             if (completionValue.type === "return") {
                 deferred.resolver.resolve({ type: "error" as const, reason: cleanupError });
             } else {
@@ -393,11 +389,11 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
                 });
             }
         }
-        return deferred.promise;
-    }
+        return await deferred.promise;
+    };
 
     next(): Promise<IteratorResult<T, R>> {
-        const state = this._state;
+        const state = this.#state;
         if (state.name === "maybeQueued" && !state.itemQueue.isEmpty) {
             const value = state.itemQueue.dequeue();
             return Promise.resolve({
@@ -407,7 +403,7 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
         } else if (state.name === "waitingForValue" || state.name === "maybeQueued") {
             const futureValue = new Deferred<IteratorResult<T>>();
             state.waitingQueue.enqueue(futureValue.resolver);
-            this._state = Object.freeze({
+            this.#state = Object.freeze({
                 ...state,
                 name: "waitingForValue",
             });
@@ -416,13 +412,13 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
             if (state.itemQueue.isEmpty) {
                 const { cleanedUp, completionValue } = state;
 
-                this._state = Object.freeze({
+                this.#state = Object.freeze({
                     name: "waitingForCleanupToFinish",
                     cleanedUp,
                     completionValue,
                 });
                 return cleanedUp.then((completionValue) => {
-                    this._state = Object.freeze({ name: "complete", completionValue });
+                    this.#state = Object.freeze({ name: "complete", completionValue });
                     if (completionValue.type === "return") {
                         return { done: true, value: completionValue.value };
                     }
@@ -460,16 +456,16 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
             type: "return" as const,
             value: returnValue,
         };
-        const state = this._state;
+        const state = this.#state;
         if (state.name === "maybeQueued") {
-            const cleanedUp = this._doCleanup(state.cleanupOperation, completionValue);
-            this._state = Object.freeze({
+            const cleanedUp = this.#doCleanup(state.cleanupOperation, completionValue);
+            this.#state = Object.freeze({
                 name: "waitingForCleanupToFinish",
                 cleanedUp,
                 completionValue,
             });
             return cleanedUp.then((completionValue) => {
-                this._state = Object.freeze({
+                this.#state = Object.freeze({
                     name: "complete",
                     completionValue,
                 });
@@ -480,7 +476,7 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
             });
         } else if (state.name === "waitingForValue") {
             const endWaiter = new Deferred<IteratorResult<T, R>>();
-            this._state = {
+            this.#state = {
                 name: "waitingForEnd",
                 endWaiter,
                 waitingQueue: state.waitingQueue,
@@ -494,13 +490,13 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
             return endWaiter.promise.then(doneTrue, doneTrue);
         } else if (state.name === "endQueued") {
             const { cleanedUp, completionValue } = state;
-            this._state = Object.freeze({
+            this.#state = Object.freeze({
                 name: "waitingForCleanupToFinish",
                 cleanedUp: state.cleanedUp,
                 completionValue,
             });
             return cleanedUp.then((completionValue) => {
-                this._state = Object.freeze({
+                this.#state = Object.freeze({
                     name: "complete",
                     completionValue,
                 });
@@ -512,7 +508,7 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
         } else if (state.name === "waitingForCleanupToFinish") {
             const { cleanedUp } = state;
             return cleanedUp.then((completionValue) => {
-                this._state = Object.freeze({
+                this.#state = Object.freeze({
                     name: "complete",
                     completionValue,
                 });
@@ -524,14 +520,17 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
         } else if (state.name === "complete") {
             const { completionValue } = state;
             if (completionValue.type === "return") {
-                return Promise.resolve({ done: true, value: completionValue.value });
+                return Promise.resolve({
+                    done: true,
+                    value: completionValue.value,
+                });
             }
             return Promise.reject(completionValue.reason);
         }
         throw new UnreachableError(state);
     }
 
-    [Symbol.asyncIterator]() {
+    [Symbol.asyncIterator](): this {
         return this;
     }
 }

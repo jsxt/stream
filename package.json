@@ -8,29 +8,46 @@
         "./": "./dist/"
     },
     "scripts": {
-        "prepublish": "rm -rf ./dist/ && npm run build",
+        "prepublishOnly": "rm -rf ./dist/ && npm run build",
         "test": "tsc && node --experimental-modules ./dist/runTests.js",
-        "build": "tsc",
+        "build": "rm -rf ./dist/; tsc --project ./tsconfig.build.json",
         "lint": "eslint src/*.ts",
         "lint:fix": "eslint --fix src/*.ts"
     },
     "author": "James \"The Jamesernator\" Browning",
     "license": "MIT",
+    "ava": {
+        "extensions": {
+            "ts": "module"
+        },
+        "nonSemVerExperiments": {
+            "configurableModuleFormat": true
+        },
+        "nodeArguments": [
+            "--enable-source-maps",
+            "--no-warnings",
+            "--loader=./typescript-loader.js",
+            "--experimental-specifier-resolution=node"
+        ],
+        "files": [
+            "tests/**/*.test.ts"
+        ]
+    },
     "devDependencies": {
-        "@jsxt/eslint-config-typescript": "^3.0.5",
+        "@jsxt/eslint-config-typescript": "^4.4.0",
         "@types/glob": "^7.1.1",
-        "@types/node": "^12.11.7",
-        "@typescript-eslint/eslint-plugin": "^2.5.0",
-        "@typescript-eslint/parser": "^2.5.0",
-        "eslint": "^6.5.1",
+        "@types/node": "^12.12.68",
+        "@typescript-eslint/eslint-plugin": "^4.4.1",
+        "@typescript-eslint/parser": "^4.4.1",
+        "ava": "^3.13.0",
+        "eslint": "^7.11.0",
         "eslint-plugin-import": "^2.18.2",
         "glob": "^7.1.5",
-        "typescript": "^3.6.4"
+        "typescript": "^4.0.3"
     },
     "files": [
-        "dist/Stream.js",
-        "dist/Stream.js.map",
-        "src/Stream.ts",
+        "dist/*",
+        "src/*",
         "README.md",
         "stream.svg",
         "tsconfig.json"
