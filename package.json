@@ -9,7 +9,7 @@
     },
     "scripts": {
         "prepublishOnly": "rm -rf ./dist/ && npm run build",
-        "test": "tsc && node --experimental-modules ./dist/runTests.js",
+        "test": "npm run build; ava",
         "build": "rm -rf ./dist/; tsc --project ./tsconfig.build.json",
         "lint": "eslint src/*.ts",
         "lint:fix": "eslint --fix src/*.ts"
