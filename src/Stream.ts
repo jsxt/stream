@@ -242,10 +242,6 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
         }
     }
 
-    get $STATE(): StreamState<T, R> {
-        return this.#state;
-    }
-
     #yieldValue = (value: T): void => {
         const state = this.#state;
         if (state.name === "maybeQueued") {
@@ -336,7 +332,35 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
     };
 
     #abort = (): void => {
-        // TODO:
+        const state = this.#state;
+        this.#state = Object.freeze({ name: "aborted" });
+        if (state.name === "waitingForValue"
+        || state.name === "waitingForEnd"
+        || state.name === "waitingForCleanupToFinish") {
+            const { waitingQueue } = state;
+            while (!waitingQueue.isEmpty) {
+                const resolver = waitingQueue.dequeue();
+                resolver.reject(new AbortError("Stream has been aborted"));
+            }
+            if (state.name === "waitingForEnd") {
+                state.endWaiter.resolver.reject(new AbortError("Stream has been aborted"));
+            }
+        }
+
+        if (state.name === "maybeQueued"
+        || state.name === "waitingForValue"
+        || state.name === "waitingForEnd"
+        ) {
+            const cleanedUp = promiseTry(state.cleanupOperation);
+            void this.#finalizeCleanup(
+                cleanedUp,
+                state.waitingQueue,
+                {
+                    type: "error",
+                    reason: new AbortError("Stream has been aborted"),
+                },
+            );
+        }
     };
 
     #finalizeCleanup = async (
@@ -344,11 +368,13 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
         waitingQueue: WaitingQueue<T, R>,
         completionValue: CompletionValue<R>,
     ): Promise<void> => {
-        this.#state = Object.freeze({
-            name: "waitingForCleanupToFinish",
-            waitingQueue,
-            completionValue,
-        });
+        if (this.#state.name !== "aborted") {
+            this.#state = Object.freeze({
+                name: "waitingForCleanupToFinish",
+                waitingQueue,
+                completionValue,
+            });
+        }
         try {
             await cleanedUp;
         } catch (error: any) {
@@ -361,9 +387,6 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
                 };
             }
         }
-        if ((this.#state as StreamState<T, R>).name === "aborted") {
-            return;
-        }
         while (!waitingQueue.isEmpty) {
             const resolver = waitingQueue.dequeue();
             if (completionValue.type === "return") {
@@ -375,10 +398,12 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
                 resolver.reject(completionValue.reason);
             }
         }
-        this.#state = Object.freeze({
-            name: "complete",
-            completionValue,
-        });
+        if (this.#state.name === "waitingForCleanupToFinish") {
+            this.#state = Object.freeze({
+                name: "complete",
+                completionValue,
+            });
+        }
     };
 
     next(): Promise<IteratorResult<T, R>> {

@@ -25,7 +25,6 @@ test("cleanup doesn't happen early if we're still waiting", async (t) => {
             cleanedUp = true;
         };
     });
-    console.log("Requesting");
     const item = stream.next();
     const item2 = stream.next();
     const closed = stream.return("test");
