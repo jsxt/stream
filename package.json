@@ -1,64 +1,64 @@
 {
-    "name": "@jsxt/stream",
-    "type": "module",
-    "version": "4.3.0",
-    "description": "Stream is a library for creating a async iterable pull stream from a push source",
-    "exports": {
-        ".": "./dist/Stream.js",
-        "./": "./dist/"
-    },
-    "scripts": {
-        "prepublishOnly": "rm -rf ./dist/ && npm run build",
-        "test": "npm run build; ava",
-        "build": "rm -rf ./dist/; tsc --project ./tsconfig.build.json",
-        "lint": "eslint src/*.ts",
-        "lint:fix": "eslint --fix src/*.ts"
-    },
-    "typesVersions": {
-        "*": {
-            "*": [
-                "./src/*"
-            ]
-        }
-    },
-    "author": "James \"The Jamesernator\" Browning",
-    "license": "MIT",
-    "ava": {
-        "extensions": {
-            "ts": "module"
-        },
-        "nonSemVerExperiments": {
-            "configurableModuleFormat": true
-        },
-        "nodeArguments": [
-            "--enable-source-maps",
-            "--no-warnings",
-            "--loader=./typescript-loader.js",
-            "--experimental-specifier-resolution=node"
-        ],
-        "files": [
-            "tests/**/*.test.ts"
-        ]
-    },
-    "devDependencies": {
-        "@jsxt/eslint-config-typescript": "^4.4.0",
-        "@types/glob": "^7.1.1",
-        "@types/node": "^12.12.68",
-        "@typescript-eslint/eslint-plugin": "^4.4.1",
-        "@typescript-eslint/parser": "^4.4.1",
-        "abort-controller": "^3.0.0",
-        "ava": "^3.13.0",
-        "eslint": "^7.11.0",
-        "eslint-plugin-import": "^2.18.2",
-        "glob": "^7.1.5",
-        "typescript": "^4.0.3"
+  "name": "@jsxt/stream",
+  "version": "4.3.0",
+  "description": "Stream is a library for creating a async iterable pull stream from a push source",
+  "license": "MIT",
+  "author": "James \"The Jamesernator\" Browning",
+  "type": "module",
+  "exports": {
+    ".": "./dist/Stream.js",
+    "./": "./dist/"
+  },
+  "files": [
+    "dist/*",
+    "src/*",
+    "README.md",
+    "stream.svg",
+    "tsconfig.base.json",
+    "tsconfig.json"
+  ],
+  "scripts": {
+    "build": "rm -rf ./dist/; tsc --project ./tsconfig.build.json",
+    "lint": "eslint src/*.ts",
+    "lint:fix": "eslint --fix src/*.ts",
+    "prepublishOnly": "rm -rf ./dist/ && npm run build",
+    "test": "npm run build; ava"
+  },
+  "ava": {
+    "extensions": {
+      "ts": "module"
     },
     "files": [
-        "dist/*",
-        "src/*",
-        "README.md",
-        "stream.svg",
-        "tsconfig.base.json",
-        "tsconfig.json"
-    ]
+      "tests/**/*.test.ts"
+    ],
+    "nodeArguments": [
+      "--enable-source-maps",
+      "--no-warnings",
+      "--loader=./typescript-loader.js",
+      "--experimental-specifier-resolution=node"
+    ],
+    "nonSemVerExperiments": {
+      "configurableModuleFormat": true
+    }
+  },
+  "devDependencies": {
+    "@jsxt/eslint-config-typescript": "^4.4.0",
+    "@types/glob": "^7.1.1",
+    "@types/node": "^12.12.68",
+    "@typescript-eslint/eslint-plugin": "^4.4.1",
+    "@typescript-eslint/parser": "^4.4.1",
+    "abort-controller": "^3.0.0",
+    "ava": "^3.13.0",
+    "eslint": "^7.11.0",
+    "eslint-plugin-import": "^2.18.2",
+    "glob": "^7.1.5",
+    "typescript": "^4.0.3"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./src/*"
+      ]
+    }
+  }
 }
