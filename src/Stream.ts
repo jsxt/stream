@@ -153,7 +153,7 @@ function assert(condition: boolean): asserts condition {
     }
 }
 
-class AbortError extends Error {
+export class AbortError extends Error {
     name = "AbortError";
 }
 
@@ -203,7 +203,9 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
         }) as StreamState<T, R>;
 
         if (abortSignal?.aborted) {
+            this.#state = Object.freeze({ name: "aborted" });
             this.#abort();
+            return;
         }
 
         abortSignal?.addEventListener("abort", this.#abort);
@@ -409,7 +411,7 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
     next(): Promise<IteratorResult<T, R>> {
         const state = this.#state;
         if (state.name === "aborted") {
-            throw new AbortError("Stream has been aborted");
+            return Promise.reject(new AbortError("Stream has been aborted"));
         } else if (state.name === "maybeQueued" && !state.itemQueue.isEmpty) {
             const value = state.itemQueue.dequeue();
             return Promise.resolve({ done: false, value });
@@ -471,7 +473,7 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
         };
         const state = this.#state;
         if (state.name === "aborted") {
-            throw new AbortError("Stream has been aborted");
+            return Promise.reject(new AbortError("Stream has been aborted"));
         } else if (state.name === "maybeQueued") {
             const { cleanupOperation, waitingQueue } = state;
             const cleanedUp = promiseTry(cleanupOperation);
