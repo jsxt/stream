@@ -1,7 +1,7 @@
 {
     "name": "@jsxt/stream",
     "type": "module",
-    "version": "4.2.0",
+    "version": "4.3.0",
     "description": "Stream is a library for creating a async iterable pull stream from a push source",
     "exports": {
         ".": "./dist/Stream.js",
@@ -15,7 +15,11 @@
         "lint:fix": "eslint --fix src/*.ts"
     },
     "typesVersions": {
-        "*": { "*": ["./src/*"] }
+        "*": {
+            "*": [
+                "./src/*"
+            ]
+        }
     },
     "author": "James \"The Jamesernator\" Browning",
     "license": "MIT",
