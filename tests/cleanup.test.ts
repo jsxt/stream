@@ -18,16 +18,17 @@ test("cleanup is called on ending a sequence early", async (t) => {
 
 test("cleanup doesn't happen early if we're still waiting", async (t) => {
     let cleanedUp = false;
-    let streamController!: StreamController<number>;
-    const stream = new Stream((stream) => {
+    let streamController!: StreamController<number, string>;
+    const stream = new Stream<number, string>((stream) => {
         streamController = stream;
         return () => {
             cleanedUp = true;
         };
     });
+    console.log("Requesting");
     const item = stream.next();
     const item2 = stream.next();
-    const closed = stream.return();
+    const closed = stream.return("test");
     t.false(cleanedUp);
     streamController.yield(3);
     streamController.yield(4);
@@ -35,7 +36,7 @@ test("cleanup doesn't happen early if we're still waiting", async (t) => {
     t.deepEqual({ done: false, value: 3 }, value);
     const value2 = await item2;
     t.deepEqual({ done: false, value: 4 }, value2);
-    t.deepEqual({ done: true, value: undefined }, await closed);
+    t.deepEqual({ done: true, value: "test" }, await closed);
     t.true(cleanedUp);
 });
 
