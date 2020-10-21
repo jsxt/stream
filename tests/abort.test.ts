@@ -1,4 +1,3 @@
-import "abort-controller/polyfill.js";
 import test from "ava";
 import type { StreamController } from "../dist/Stream.js";
 import Stream, { AbortError } from "../dist/Stream.js";
