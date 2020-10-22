@@ -42,7 +42,7 @@
     }
   },
   "devDependencies": {
-    "@jsxt/eslint-config-typescript": "^4.4.0",
+    "@jsxt/eslint-config-typescript": "^4.5.0",
     "@types/glob": "^7.1.1",
     "@types/node": "^12.12.68",
     "@typescript-eslint/eslint-plugin": "^4.4.1",

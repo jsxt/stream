@@ -328,7 +328,7 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
         this.#completeValue(completionValue);
     };
 
-    #throwValue = (reason: any | any): void => {
+    #throwValue = (reason: any): void => {
         const completionValue = { type: "error" as const, reason };
         this.#completeValue(completionValue);
     };
