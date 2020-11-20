@@ -5,6 +5,7 @@
   "license": "MIT",
   "author": "James \"The Jamesernator\" Browning",
   "type": "module",
+  "main": "./dist/Stream.js",
   "exports": {
     ".": "./dist/Stream.js",
     "./": "./dist/"
