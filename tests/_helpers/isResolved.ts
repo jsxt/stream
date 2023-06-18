@@ -1,15 +1,16 @@
-class NotResolved extends Error {}
+const notResolved = Symbol("notResolved");
 
 /* This tests that a promise is already resolved */
-export default async function isResolved(promise) {
+export default async function isResolved(
+    promise: Promise<any>,
+): Promise<boolean> {
     try {
-        await Promise.race([promise, Promise.reject(new NotResolved())])
-        return true
-    } catch (err) {
-        if (err instanceof NotResolved) {
-            return false
-        } else {
-            throw err
+        await Promise.race([promise, Promise.reject(notResolved)]);
+        return true;
+    } catch (err: unknown) {
+        if (err === notResolved) {
+            return false;
         }
+        throw err;
     }
 }

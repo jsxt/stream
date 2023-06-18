@@ -1,12 +1,10 @@
-/// <reference lib="esnext" />
-
 type Resolver<T> = {
-    resolve: (value: T | Promise<T>) => void,
+    resolve: (value: Promise<T> | T) => void,
     reject: (error: any) => void,
 };
 
 class Deferred<T> {
-    readonly #resolve: (value: T | Promise<T>) => void;
+    readonly #resolve: (value: Promise<T> | T) => void;
     readonly #reject: (error: any) => void;
     readonly #promise: Promise<T>;
 
@@ -30,9 +28,9 @@ class Deferred<T> {
     }
 }
 
-const doNothing = () => {
+function doNothing(): void {
     /* Nothing to do in doNothing */
-};
+}
 
 interface AbstractQueue<T> {
     isEmpty: boolean;
@@ -41,7 +39,7 @@ interface AbstractQueue<T> {
 }
 
 export class Queue<T> implements AbstractQueue<T> {
-    readonly #queue: Set<{ value: T} > = new Set();
+    readonly #queue = new Set<{ value: T }>();
 
     get isEmpty(): boolean {
         return this.#queue.size === 0;
@@ -57,6 +55,7 @@ export class Queue<T> implements AbstractQueue<T> {
             throw new Error(`Can't dequeue from empty queue`);
         }
         const [wrapper] = this.#queue;
+        assert(wrapper !== undefined);
         this.#queue.delete(wrapper);
         return wrapper.value;
     }
@@ -64,9 +63,13 @@ export class Queue<T> implements AbstractQueue<T> {
 
 type CleanupCallback = () => any;
 
-type WaitingQueue<T, R> = Queue<Deferred<IteratorResult<T, R>>["resolver"]>;
+type WaitingQueue<T, R> = Queue<
+    Deferred<IteratorResult<T, R>>["resolver"]
+>;
 
-type CompletionValue<R> = { type: "return", value: R } | { type: "error", reason: any };
+type CompletionValue<R> =
+    | { type: "error", reason: any }
+    | { type: "return", value: R };
 
 type MaybeQueuedState<T, R> = {
     name: "maybeQueued",
@@ -111,18 +114,19 @@ type CompleteState<R> = {
 
 type AbortedState = {
     name: "aborted",
+    reason: any,
 };
 
-type StreamState<T, R>
-    = MaybeQueuedState<T, R>
-    | EndQueuedState<T, R>
-    | WaitingForValueState<T, R>
-    | WaitingForEndState<T, R>
-    | WaitingForCleanupToFinish<T, R>
+type StreamState<T, R> =
+    | AbortedState
     | CompleteState<R>
-    | AbortedState;
+    | EndQueuedState<T, R>
+    | MaybeQueuedState<T, R>
+    | WaitingForCleanupToFinish<T, R>
+    | WaitingForEndState<T, R>
+    | WaitingForValueState<T, R>;
 
-export type StreamController<T, R=void> = {
+export type StreamController<T, R = void> = {
     [Symbol.toStringTag]: string,
     yield: (value: T) => void,
     next: (value: T) => void,
@@ -133,14 +137,14 @@ export type StreamController<T, R=void> = {
 };
 
 class UnreachableError extends Error {
-    constructor(_never: never) {
+    constructor(never: never) {
         super(`This can't happen`);
     }
 }
 
-type StreamInitializer<T, R>
-    = ((controller: StreamController<T, R>) => void)
-    | ((controller: StreamController<T, R>) => CleanupCallback);
+type StreamInitializer<T, R> =
+    | ((controller: StreamController<T, R>) => CleanupCallback)
+    | ((controller: StreamController<T, R>) => void);
 
 type StreamOptions<T> = {
     queue?: AbstractQueue<T>,
@@ -153,20 +157,17 @@ function assert(condition: boolean): asserts condition {
     }
 }
 
-export class AbortError extends Error {
-    name = "AbortError";
-}
-
-async function promiseTry<R>(f: () => R | Promise<R>): Promise<R> {
+async function promiseTry<R>(f: () => Promise<R> | R): Promise<R> {
     return await f();
 }
 
-export default class Stream<T, R=void>
-implements AsyncIterator<T, R>, AsyncIterable<T> {
-    static abortable<T, R=void>(
+export default class Stream<T, R = void>
+    implements AsyncIterator<T, R>, AsyncIterable<T>
+{
+    static abortable<T, R = void>(
         abortSignal: AbortSignal,
         initializer: StreamInitializer<T, R>,
-        options: StreamOptions<T>={},
+        options: StreamOptions<T> = {},
     ): Stream<T, R> {
         return new Stream(initializer, {
             ...options,
@@ -176,10 +177,10 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
 
     #state: Readonly<StreamState<T, R>>;
 
-    constructor(initializer: StreamInitializer<T, R>, {
-        queue=new Queue(),
-        abortSignal,
-    }: StreamOptions<T>={}) {
+    constructor(
+        initializer: StreamInitializer<T, R>,
+        { queue = new Queue(), abortSignal }: StreamOptions<T> = {},
+    ) {
         if (typeof initializer !== "function") {
             throw new TypeError("Initializer must be a function");
         }
@@ -188,7 +189,7 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
         const throwValue = this.#throwValue;
         const returnValue = this.#returnValue;
 
-        let cleanupComplete: undefined | Deferred<CompletionValue<R>>;
+        let cleanupComplete: Deferred<CompletionValue<R>> | undefined;
 
         const waitingQueue: WaitingQueue<T, R> = new Queue();
 
@@ -203,12 +204,14 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
         }) as StreamState<T, R>;
 
         if (abortSignal?.aborted) {
-            this.#state = Object.freeze({ name: "aborted" });
-            this.#abort();
+            this.#abort(abortSignal.reason);
             return;
         }
 
-        abortSignal?.addEventListener("abort", this.#abort);
+        abortSignal?.addEventListener(
+            "abort",
+            () => void this.#abort(abortSignal.reason),
+        );
 
         const realCleanup = initializer({
             [Symbol.toStringTag]: "StreamController",
@@ -220,9 +223,10 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
             complete: returnValue,
         });
 
-        const cleanupOperation = typeof realCleanup === "function"
-            ? realCleanup
-            : doNothing;
+        const cleanupOperation
+            = typeof realCleanup === "function"
+                ? realCleanup
+                : doNothing;
 
         const state = this.#state;
         if (cleanupComplete) {
@@ -265,7 +269,11 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
                 value,
             });
         } else if (state.name === "waitingForEnd") {
-            const { waitingQueue, completionValue, cleanupOperation } = state;
+            const {
+                waitingQueue,
+                completionValue,
+                cleanupOperation,
+            } = state;
             const resolver = waitingQueue.dequeue();
             resolver.resolve({
                 done: false,
@@ -280,10 +288,12 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
                     completionValue,
                 );
             }
-        } else if (state.name === "aborted"
-        || state.name === "endQueued"
-        || state.name === "complete"
-        || state.name === "waitingForCleanupToFinish") {
+        } else if (
+            state.name === "aborted"
+            || state.name === "endQueued"
+            || state.name === "complete"
+            || state.name === "waitingForCleanupToFinish"
+        ) {
             // FUTURE: Add warning hook
         } else {
             throw new UnreachableError(state);
@@ -301,8 +311,10 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
                 cleanedUp: promiseTry(cleanupOperation),
                 waitingQueue: state.waitingQueue,
             });
-        } else if (state.name === "waitingForValue"
-        || state.name === "waitingForEnd") {
+        } else if (
+            state.name === "waitingForValue"
+            || state.name === "waitingForEnd"
+        ) {
             const { cleanupOperation, waitingQueue } = state;
             const cleanedUp = promiseTry(cleanupOperation);
             if (state.name === "waitingForEnd") {
@@ -313,10 +325,12 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
                 waitingQueue,
                 completionValue,
             );
-        } else if (state.name === "aborted"
-        || state.name === "complete"
-        || state.name === "endQueued"
-        || state.name === "waitingForCleanupToFinish") {
+        } else if (
+            state.name === "aborted"
+            || state.name === "complete"
+            || state.name === "endQueued"
+            || state.name === "waitingForCleanupToFinish"
+        ) {
             // FUTURE: Add warning hook
         } else {
             throw new UnreachableError(state);
@@ -333,25 +347,28 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
         this.#completeValue(completionValue);
     };
 
-    #abort = (): void => {
+    #abort = (reason: any): void => {
         const state = this.#state;
-        this.#state = Object.freeze({ name: "aborted" });
-        if (state.name === "waitingForValue"
-        || state.name === "waitingForEnd"
-        || state.name === "waitingForCleanupToFinish") {
+        this.#state = Object.freeze({ name: "aborted", reason });
+        if (
+            state.name === "waitingForValue"
+            || state.name === "waitingForEnd"
+            || state.name === "waitingForCleanupToFinish"
+        ) {
             const { waitingQueue } = state;
             while (!waitingQueue.isEmpty) {
                 const resolver = waitingQueue.dequeue();
-                resolver.reject(new AbortError("Stream has been aborted"));
+                resolver.reject(reason);
             }
             if (state.name === "waitingForEnd") {
-                state.endWaiter.resolver.reject(new AbortError("Stream has been aborted"));
+                state.endWaiter.resolver.reject(reason);
             }
         }
 
-        if (state.name === "maybeQueued"
-        || state.name === "waitingForValue"
-        || state.name === "waitingForEnd"
+        if (
+            state.name === "maybeQueued"
+            || state.name === "waitingForValue"
+            || state.name === "waitingForEnd"
         ) {
             const cleanedUp = promiseTry(state.cleanupOperation);
             void this.#finalizeCleanup(
@@ -359,7 +376,7 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
                 state.waitingQueue,
                 {
                     type: "error",
-                    reason: new AbortError("Stream has been aborted"),
+                    reason,
                 },
             );
         }
@@ -385,7 +402,10 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
             } else {
                 completionValue = {
                     type: "error",
-                    reason: new AggregateError([completionValue.reason, error]),
+                    reason: new AggregateError([
+                        completionValue.reason,
+                        error,
+                    ]),
                 };
             }
         }
@@ -411,12 +431,17 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
     next(): Promise<IteratorResult<T, R>> {
         const state = this.#state;
         if (state.name === "aborted") {
-            return Promise.reject(new AbortError("Stream has been aborted"));
-        } else if (state.name === "maybeQueued" && !state.itemQueue.isEmpty) {
+            return Promise.reject(state.reason);
+        } else if (
+            state.name === "maybeQueued"
+            && !state.itemQueue.isEmpty
+        ) {
             const value = state.itemQueue.dequeue();
             return Promise.resolve({ done: false, value });
-        } else if (state.name === "waitingForValue"
-        || state.name === "maybeQueued") {
+        } else if (
+            state.name === "waitingForValue"
+            || state.name === "maybeQueued"
+        ) {
             const futureValue = new Deferred<IteratorResult<T, R>>();
             state.waitingQueue.enqueue(futureValue.resolver);
             this.#state = Object.freeze({
@@ -473,7 +498,7 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
         };
         const state = this.#state;
         if (state.name === "aborted") {
-            return Promise.reject(new AbortError("Stream has been aborted"));
+            return Promise.reject(state.reason);
         } else if (state.name === "maybeQueued") {
             const { cleanupOperation, waitingQueue } = state;
             const cleanedUp = promiseTry(cleanupOperation);
@@ -499,7 +524,8 @@ implements AsyncIterator<T, R>, AsyncIterable<T> {
         } else if (state.name === "waitingForEnd") {
             return state.endWaiter.promise;
         } else if (state.name === "endQueued") {
-            const { cleanedUp, completionValue, waitingQueue } = state;
+            const { cleanedUp, completionValue, waitingQueue }
+                = state;
             const futureValue = new Deferred<IteratorResult<T, R>>();
             waitingQueue.enqueue(futureValue.resolver);
             void this.#finalizeCleanup(
