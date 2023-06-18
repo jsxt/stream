@@ -11,18 +11,17 @@ await test("we can construct a stream with an AbortSignal", (t) => {
                 controller.yield(1);
                 controller.yield(2);
             },
-            { abortSignal: abortController.signal },
+            { signal: abortController.signal },
         );
         assert.equal(stream.constructor, Stream);
     }
     {
-        const stream = Stream.abortable(
-            abortController.signal,
+        const stream = new Stream(
             (controller) => {
                 controller.yield(1);
                 controller.yield(2);
             },
-            { abortSignal: abortController.signal },
+            { signal: abortController.signal },
         );
         assert.equal(stream.constructor, Stream);
     }
@@ -34,12 +33,12 @@ class TestError extends Error {
 
 await test("aborted stream will throw when trying to use next or return", async (t) => {
     const abortController = new AbortController();
-    const stream = Stream.abortable<number>(
-        abortController.signal,
+    const stream = new Stream(
         (controller) => {
             controller.yield(1);
             controller.yield(2);
         },
+        { signal: abortController.signal },
     );
     assert.deepEqual(await stream.next(), { done: false, value: 1 });
     assert.deepEqual(await stream.next(), { done: false, value: 2 });
@@ -54,11 +53,12 @@ await test("aborted stream will throw when trying to use next or return", async 
 await test("aborting a stream aborts all unresolved calls to .next and .return", async (t) => {
     const abortController = new AbortController();
     let streamController!: StreamController<number, string>;
-    const stream = Stream.abortable<number, string>(
-        abortController.signal,
+
+    const stream = new Stream<number, string>(
         (s) => {
             streamController = s;
         },
+        { signal: abortController.signal },
     );
 
     const one = stream.next();
@@ -92,11 +92,12 @@ await test("aborting a stream aborts all unresolved calls to .next and .return",
 await test("completed streams may still be aborted", async (t) => {
     const abortController = new AbortController();
     let streamController!: StreamController<number, string>;
-    const stream = Stream.abortable<number, string>(
-        abortController.signal,
-        (s) => {
-            streamController = s;
+
+    const stream = new Stream<number, string>(
+        (c) => {
+            streamController = c;
         },
+        { signal: abortController.signal },
     );
 
     streamController.yield(1);
@@ -124,11 +125,15 @@ await test("completed streams may still be aborted", async (t) => {
 await test("abort triggers cleanup", async (t) => {
     const abortController = new AbortController();
     let cleanedUp = false;
-    const stream = Stream.abortable(abortController.signal, () => {
-        return () => {
-            cleanedUp = true;
-        };
-    });
+
+    const stream = new Stream(
+        () => {
+            return () => {
+                cleanedUp = true;
+            };
+        },
+        { signal: abortController.signal },
+    );
 
     const abortError = new TestError();
     abortController.abort(abortError);
@@ -144,13 +149,14 @@ await test("an already aborted signal means the initializer will never run", asy
     const abortError = new TestError();
     abortController.abort(abortError);
     let called: boolean = false;
-    const stream = Stream.abortable<number>(
-        abortController.signal,
-        (s) => {
+    const stream = new Stream<number>(
+        (c) => {
             called = true;
-            s.yield(1);
+            c.yield(1);
         },
+        { signal: abortController.signal },
     );
+
     assert(!called);
     await assert.rejects(
         () => stream.next(),

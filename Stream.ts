@@ -148,7 +148,7 @@ type StreamInitializer<T, R> =
 
 type StreamOptions<T> = {
     queue?: AbstractQueue<T>,
-    abortSignal?: AbortSignal,
+    signal?: AbortSignal,
 };
 
 function assert(condition: boolean): asserts condition {
@@ -164,22 +164,11 @@ async function promiseTry<R>(f: () => Promise<R> | R): Promise<R> {
 export default class Stream<T, R = void>
     implements AsyncIterator<T, R>, AsyncIterable<T>
 {
-    static abortable<T, R = void>(
-        abortSignal: AbortSignal,
-        initializer: StreamInitializer<T, R>,
-        options: StreamOptions<T> = {},
-    ): Stream<T, R> {
-        return new Stream(initializer, {
-            ...options,
-            abortSignal,
-        });
-    }
-
     #state: Readonly<StreamState<T, R>>;
 
     constructor(
         initializer: StreamInitializer<T, R>,
-        { queue = new Queue(), abortSignal }: StreamOptions<T> = {},
+        { queue = new Queue(), signal }: StreamOptions<T> = {},
     ) {
         if (typeof initializer !== "function") {
             throw new TypeError("Initializer must be a function");
@@ -203,14 +192,14 @@ export default class Stream<T, R = void>
             },
         }) as StreamState<T, R>;
 
-        if (abortSignal?.aborted) {
-            this.#abort(abortSignal.reason);
+        if (signal?.aborted) {
+            this.#abort(signal.reason);
             return;
         }
 
-        abortSignal?.addEventListener(
+        signal?.addEventListener(
             "abort",
-            () => void this.#abort(abortSignal.reason),
+            () => void this.#abort(signal.reason),
         );
 
         const realCleanup = initializer({

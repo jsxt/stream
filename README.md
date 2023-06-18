@@ -42,15 +42,28 @@ for await (const chunk of mediaChunks(recorder, stopWhen)) {
 
 ### API
 
-#### `new Stream(initializer, { queue=new Queue() }={})`
+#### `new Stream<T, R=void>(initializer: StreamInitializer<T, R>, options?: StreamOptions)`
 
 The `Stream` constructor requires a single paramater as it's first argument, the initializer will be called
-immediately a `StreamController` object, it may optionally return a single function that will be called
+immediately with a `StreamController` object, it may optionally return a single function that will be called
 when cleanup is started and the stream is complete.
 
-Optionally as a second argument an options bag may be provided. At current the only available option is `queue`.
+```ts
+type StreamInitializer<T, R> = (controller: StreamController<T, R>) => CleanupCallback | undefined;
 
-##### `StreamOptions.queue`
+type CleanupCallback = () => any;
+```
+
+Optionally as a second argument an options bag may be provided. This allows for customizing the queueing behaviour or providing an abort signal.
+
+```ts
+type StreamOptions<T> = {
+    queue?: AbstractQueue<T>,
+    abortSignal?: AbortSignal,
+}
+```
+
+##### `StreamOptions.queue: AbstractQueue<T>`
 
 Optionally you can pass a custom queue object. It needs to conform to the following interface:
 
@@ -63,6 +76,8 @@ interface AbstractQueue<T> {
 ```
 
 The only other invariant on these methods is that that if `.isEmpty` is `true` then until the microtask ends the next call to `.dequeue` **must** return an item. `.dequeue` will never be called if `.isEmpty` is false.
+
+#### `StreamOptions.signal`
 
 #### `stream.next()`
 
@@ -80,11 +95,11 @@ If the cleanup callback returns a promise then this will not resolve until the r
 
 *Note:* If the queue still has items they will simply be ignored.
 
-### `StreamController`
+### `class StreamController<T>`
 
 The stream controller object is how you put values into the iterator. You can send values, throw an error or end the iterable at any point.
 
-#### `StreamController.yield(value)`/`StreamController.next(value)`
+#### `StreamController<T>.yield(value: T)`/`StreamController<T>.next(value: T)`
 
 The `.yield` method (and its alias `.next`) put a value in the stream. If there are already calls to `.next` waiting it will be immediately sent to those, otherwise it will enqueue the values in the queue.
 

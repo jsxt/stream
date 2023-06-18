@@ -1,0 +1,7 @@
+**/*.cjs
+**/*.mjs
+**/*.js
+**/*.d.ts
+**/*.d.mts
+**/*.d.cts
+!**/.eslintrc.cjs
